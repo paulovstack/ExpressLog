@@ -151,6 +151,144 @@
     .font-display.text-2xl { font-size: 1.35rem !important; }
   }
 
+
+  /* ===== MENU HAMBURGUER + CARDS SOMENTE NO CELULAR ===== */
+  @media (max-width: 767px) {
+    header > div { position: relative; }
+    .mobile-menu-btn {
+      display: flex !important;
+      order: 2;
+      margin-left: auto;
+      flex: 0 0 auto;
+    }
+    #apiStatus {
+      order: 4 !important;
+      width: 100%;
+      margin: 0 !important;
+      padding: 2px 2px 0;
+    }
+    #tabs {
+      display: none !important;
+      order: 3 !important;
+      width: 100%;
+      overflow: visible !important;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 4px !important;
+      padding: 6px !important;
+      border-radius: 12px !important;
+    }
+    #tabs.mobile-open { display: flex !important; }
+    #tabs .tab-btn {
+      width: 100%;
+      text-align: left;
+      border-radius: 8px !important;
+      padding: 11px 12px !important;
+      min-height: 42px;
+    }
+
+    /* Tabelas passam a ser cartões; nada de arrastar para o lado. */
+    [data-tab-panel="dashboard"] table,
+    [data-tab-panel="consultas"] table {
+      min-width: 0 !important;
+      width: 100% !important;
+    }
+    [data-tab-panel="dashboard"] thead,
+    [data-tab-panel="consultas"] thead {
+      display: none !important;
+    }
+    #tripsBody, #driversBody, #vehiclesBody {
+      display: block;
+      width: 100%;
+      padding: 10px;
+    }
+    #tripsBody tr, #driversBody tr, #vehiclesBody tr {
+      display: block;
+      width: 100%;
+      margin-bottom: 12px;
+      padding: 12px;
+      border: 1px solid rgba(55,69,89,.75) !important;
+      border-radius: 12px;
+      background: #18212E;
+    }
+    #tripsBody tr:last-child, #driversBody tr:last-child, #vehiclesBody tr:last-child {
+      margin-bottom: 0;
+    }
+    #tripsBody td, #driversBody td, #vehiclesBody td {
+      display: flex;
+      width: 100%;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 8px 2px !important;
+      border-bottom: 1px solid rgba(55,69,89,.45);
+      white-space: normal !important;
+      text-align: right !important;
+    }
+    #tripsBody td:last-child, #driversBody td:last-child, #vehiclesBody td:last-child {
+      border-bottom: 0;
+    }
+    #tripsBody td::before, #driversBody td::before, #vehiclesBody td::before {
+      flex: 0 0 38%;
+      text-align: left;
+      color: #94a3b8;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+
+    #tripsBody td:nth-child(1)::before { content: "Viagem"; }
+    #tripsBody td:nth-child(2)::before { content: "Motorista"; }
+    #tripsBody td:nth-child(3)::before { content: "Veículo"; }
+    #tripsBody td:nth-child(4)::before { content: "Rota"; }
+    #tripsBody td:nth-child(5)::before { content: "Carga"; }
+    #tripsBody td:nth-child(6)::before { content: "Saída"; }
+    #tripsBody td:nth-child(7)::before { content: "Chegada"; }
+    #tripsBody td:nth-child(8)::before { content: "Status"; }
+    #tripsBody td:nth-child(9)::before { content: "Ações"; }
+
+    #driversBody td:nth-child(1)::before { content: "ID"; }
+    #driversBody td:nth-child(2)::before { content: "Nome"; }
+    #driversBody td:nth-child(3)::before { content: "CNH"; }
+    #driversBody td:nth-child(4)::before { content: "Categoria"; }
+    #driversBody td:nth-child(5)::before { content: "Pontos"; }
+    #driversBody td:nth-child(6)::before { content: "Status"; }
+    #driversBody td:nth-child(7)::before { content: "Ações"; }
+
+    #vehiclesBody td:nth-child(1)::before { content: "ID"; }
+    #vehiclesBody td:nth-child(2)::before { content: "Placa"; }
+    #vehiclesBody td:nth-child(3)::before { content: "Modelo"; }
+    #vehiclesBody td:nth-child(4)::before { content: "Categoria"; }
+    #vehiclesBody td:nth-child(5)::before { content: "Capacidade"; }
+    #vehiclesBody td:nth-child(6)::before { content: "Status"; }
+    #vehiclesBody td:nth-child(7)::before { content: "Ações"; }
+
+    /* Skeleton/erros que usam colspan continuam legíveis. */
+    #tripsBody td[colspan], #driversBody td[colspan], #vehiclesBody td[colspan] {
+      display: block;
+      text-align: center !important;
+    }
+    #tripsBody td[colspan]::before, #driversBody td[colspan]::before, #vehiclesBody td[colspan]::before {
+      content: none !important;
+    }
+
+    /* Filtros das consultas ficam empilhados quando necessário. */
+    [data-tab-panel="consultas"] .px-5.py-3.border-b {
+      flex-wrap: wrap;
+    }
+    #driverStatusFilter, #vehicleStatusFilter {
+      width: 100%;
+    }
+
+    /* Botões de ação dos cards podem quebrar linha sem estourar a tela. */
+    #tripsBody td:last-child,
+    #driversBody td:last-child,
+    #vehiclesBody td:last-child {
+      flex-wrap: wrap;
+    }
+  }
+
 </style>
 </head>
 <body class="bg-base-950 text-slate-200 min-h-screen antialiased glow">
@@ -164,6 +302,14 @@
       </div>
       <span class="font-display font-700 text-lg tracking-tight text-white">ExpressLog</span>
     </div>
+
+    <button id="mobileMenuBtn" type="button" aria-label="Abrir menu" aria-expanded="false"
+      class="mobile-menu-btn hidden w-10 h-10 rounded-lg border border-base-700/60 bg-base-850 text-white items-center justify-center">
+      <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <path d="M4 7h16M4 12h16M4 17h16"/>
+      </svg>
+    </button>
+
     <nav class="flex items-center gap-1 bg-base-850 border border-base-700/60 rounded-full p-1" id="tabs">
       <button data-tab="dashboard" class="tab-btn px-4 py-1.5 text-sm rounded-full font-medium transition-colors">Painel de viagens</button>
       <button data-tab="novo" class="tab-btn px-4 py-1.5 text-sm rounded-full font-medium transition-colors">Novo agendamento</button>
@@ -1501,6 +1647,31 @@ $("#editVehicleForm").addEventListener("submit", async e => {
 /* ---------- init ---------- */
 activateTab("dashboard");
 loadTrips();
+
+/* menu mobile */
+const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+if (mobileMenuBtn) {
+  mobileMenuBtn.addEventListener("click", () => {
+    const tabs = document.getElementById("tabs");
+    const aberto = tabs.classList.toggle("mobile-open");
+    mobileMenuBtn.setAttribute("aria-expanded", String(aberto));
+  });
+
+  document.getElementById("tabs").addEventListener("click", e => {
+    if (e.target.closest(".tab-btn") && window.innerWidth <= 767) {
+      document.getElementById("tabs").classList.remove("mobile-open");
+      mobileMenuBtn.setAttribute("aria-expanded", "false");
+    }
+  });
+
+  window.addEventListener("resize", () => {
+    if (window.innerWidth > 767) {
+      document.getElementById("tabs").classList.remove("mobile-open");
+      mobileMenuBtn.setAttribute("aria-expanded", "false");
+    }
+  });
+}
+
 </script>
 </body>
 </html>
