@@ -46,6 +46,111 @@
   dialog::backdrop{background:rgba(9,13,20,.65);backdrop-filter:blur(3px)}
   .glow{background:radial-gradient(600px circle at 15% -10%, rgba(47,125,240,.14), transparent 55%)}
   @media (prefers-reduced-motion: reduce){ *{animation-duration:.01ms!important} }
+
+  /* ===== RESPONSIVIDADE EXPRESSLOG ===== */
+  @media (max-width: 767px) {
+    html, body { max-width: 100%; overflow-x: hidden; }
+
+    header > div {
+      height: auto !important;
+      min-height: 64px;
+      padding: 10px 16px !important;
+      gap: 10px !important;
+      flex-wrap: wrap;
+    }
+
+    header > div > div:first-child { order: 1; }
+    #apiStatus { order: 2; margin-left: auto; }
+    #apiStatusTxt { font-size: 11px; }
+
+    #tabs {
+      order: 3;
+      width: 100%;
+      overflow-x: auto;
+      justify-content: flex-start;
+      border-radius: 12px !important;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+    #tabs::-webkit-scrollbar { display: none; }
+    #tabs .tab-btn {
+      flex: 0 0 auto;
+      white-space: nowrap;
+      padding: 8px 12px !important;
+      font-size: 12px;
+    }
+
+    main {
+      padding: 20px 14px !important;
+      width: 100%;
+    }
+
+    h1 { line-height: 1.2; }
+
+    /* Formulários de duas colunas viram uma coluna no celular */
+    form .grid.grid-cols-2,
+    [data-tab-panel="cadastro"] .grid.grid-cols-2 {
+      grid-template-columns: minmax(0, 1fr) !important;
+    }
+
+    /* Campos confortáveis para toque e sem zoom automático no iPhone */
+    input, select, textarea, button { min-height: 42px; }
+    input, select, textarea { font-size: 16px !important; }
+
+    /* Busca e filtros passam a ocupar a largura disponível */
+    #tripSearch { max-width: none; }
+    #statusChips {
+      width: 100%;
+      flex-wrap: nowrap !important;
+      overflow-x: auto;
+      padding-bottom: 3px;
+      scrollbar-width: none;
+    }
+    #statusChips::-webkit-scrollbar { display: none; }
+    #statusChips button { flex: 0 0 auto; }
+
+    /* Tabelas continuam completas, com rolagem horizontal controlada */
+    .overflow-x-auto {
+      -webkit-overflow-scrolling: touch;
+      max-width: 100%;
+    }
+    table { min-width: 760px; }
+    #driversBody, #vehiclesBody, #tripsBody { font-size: 13px; }
+    th, td { white-space: nowrap; }
+
+    /* Cards e caixas */
+    .rounded-xl { border-radius: 12px; }
+    .p-6 { padding: 18px !important; }
+    .px-5 { padding-left: 14px !important; padding-right: 14px !important; }
+
+    /* Janelas de edição/confirmação */
+    dialog {
+      width: calc(100vw - 24px) !important;
+      max-width: 520px !important;
+      margin: auto;
+    }
+    dialog > div {
+      max-height: 88vh;
+      overflow-y: auto;
+    }
+
+    /* Toast não estoura a largura da tela */
+    #toastWrap {
+      width: calc(100% - 28px);
+      bottom: 16px !important;
+    }
+    #toastWrap > div {
+      width: 100%;
+      text-align: center;
+    }
+  }
+
+  @media (max-width: 420px) {
+    header > div { padding-left: 12px !important; padding-right: 12px !important; }
+    main { padding-left: 12px !important; padding-right: 12px !important; }
+    .font-display.text-2xl { font-size: 1.35rem !important; }
+  }
+
 </style>
 </head>
 <body class="bg-base-950 text-slate-200 min-h-screen antialiased glow">
