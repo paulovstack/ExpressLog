@@ -1153,6 +1153,7 @@ $("#tripsBody").addEventListener("click", async e => {
     const t = trips.find(x => x.id_viagem == id);
     if (t) t.status_vi = "em_andamento";
     renderTrips(); renderStats();
+    await loadVehicles();
     toast("Rota iniciada");
   } catch (err) {
     toast(err.message, true);
@@ -1181,6 +1182,7 @@ $("#tripsBody").addEventListener("click", async e => {
     const t = trips.find(x => x.id_viagem == id);
     if (t) { t.status_vi = "concluida"; t.data_hora_chegada = agora; }
     renderTrips(); renderStats();
+    await loadVehicles();
     toast("Viagem concluída — chegada registrada");
   } catch (err) {
     toast(err.message, true);
@@ -1208,6 +1210,7 @@ $("#tripsBody").addEventListener("click", async e => {
     const t = trips.find(x => x.id_viagem == id);
     if (t) t.status_vi = "cancelada";
     renderTrips(); renderStats();
+    await loadVehicles();
     toast("Viagem cancelada");
   } catch (err) {
     toast(err.message, true);
@@ -1278,6 +1281,7 @@ $("#tripForm").addEventListener("submit", async e => {
     $("#tripForm").reset();
     toast("Viagem agendada com sucesso");
     trips = [];
+    await loadVehicles();
     setApiStatus(true);
     activateTab("dashboard");
   } catch (err) {
@@ -1453,9 +1457,15 @@ function renderVehicles() {
       <td class="px-5 py-2.5 text-slate-300">${esc(v.categoria_requerida)}</td>
       <td class="px-5 py-2.5 text-slate-400 tabular-nums">${fmtKg(v.capacidade_carga_kg)}</td>
       <td class="px-5 py-2.5">
-        <select data-vehicle-status="${v.id_veiculo}" class="text-xs rounded-full px-2 py-1 border bg-transparent cursor-pointer ${st.cls} focus:outline-none">
-          ${Object.entries(VEHICLE_STATUS_MAP).map(([val, m]) => `<option value="${val}" class="bg-base-850 text-slate-200" ${val === status ? "selected" : ""}>${m.label}</option>`).join("")}
-        </select>
+        ${status === "em_viagem"
+          ? `<span class="text-xs rounded-full px-2.5 py-1 border inline-block ${st.cls}">${st.label}</span>`
+          : `<select data-vehicle-status="${v.id_veiculo}" class="text-xs rounded-full px-2 py-1 border bg-transparent cursor-pointer ${st.cls} focus:outline-none">
+              ${["disponivel", "em_manutencao"].map(val => {
+                const m = VEHICLE_STATUS_MAP[val];
+                return `<option value="${val}" class="bg-base-850 text-slate-200" ${val === status ? "selected" : ""}>${m.label}</option>`;
+              }).join("")}
+            </select>`}
+
       </td>
       <td class="px-5 py-2.5 text-right whitespace-nowrap">
         <button data-edit-vehicle="${v.id_veiculo}" class="text-slate-500 hover:text-route-400 transition-colors p-1.5 rounded-md hover:bg-route-500/10" aria-label="Editar veículo ${v.id_veiculo}">
