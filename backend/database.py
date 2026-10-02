@@ -1,9 +1,12 @@
-import pymysql  
+import os
+import pymysql
 
 def obter_conexao():
     return pymysql.connect(
-        host='localhost',
-        user='root', #<- PONHA SEU USUÁRIO AQUI
-        password='3214', #<- PONHA SUA SENHA AQUI
-        database= "Explog_db",
-        cursorclass=pymysql.cursors.DictCursor)
+        host=os.getenv("DB_HOST", "localhost"),
+        port=int(os.getenv("DB_PORT", "3306")),
+        user=os.getenv("DB_USER", "root"),
+        password=os.getenv("DB_PASSWORD", ""),
+        database=os.getenv("DB_NAME", "Explog_db"),
+        cursorclass=pymysql.cursors.DictCursor
+    )
