@@ -93,7 +93,7 @@ def deletar_veiculo_banco(id_veiculo: int):
     try:
         with conexao.cursor() as cursor:
             
-            sql = "DELETE FROM veiculo WHERE id_veiculo = %s"
+            sql = "DELETE FROM Veiculo WHERE id_veiculo = %s"
             cursor.execute(sql, (id_veiculo,))
             conexao.commit()
             

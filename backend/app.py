@@ -7,7 +7,7 @@ import re
 from controllers.controller import agendar_viagem
 from models.motorista import inserir_motorista_banco, buscar_motorista_por_id_banco, atualizar_motorista_banco, atualizar_status_motorista_banco, listar_todos_motoristas_banco, deletar_motorista_banco
 from models.veiculo import listar_todos_veiculos, inserir_veiculo, atualizar_veiculo_banco, atualizar_status_veiculo,buscar_veiculo_por_id, deletar_veiculo_banco, listar_todos_veiculos, deletar_veiculo_banco
-from models.viagem import listar_todas_viagens, atualizar_viagem_concluida, deletar_viagem_banco
+from models.viagem import listar_todas_viagens, atualizar_viagem_concluida, deletar_viagem_banco, buscar_viagem_por_id
 
 app = FastAPI(title="ExpressLog API", description="API de Gerenciamento de Viagens")
 app.add_middleware(
@@ -86,23 +86,39 @@ def criar_viagem(dados: ViagemSchema):
         
     return resultado
 
-
 @app.patch("/trips/{id_viagem}")
 def modificar_status_viagem(id_viagem: int, dados: StatusPatchSchema):
-    status_permitidos = ['agendada', 'em_andamento', 'concluida', 'cancelada']
+    status_permitidos = ["agendada", "em_andamento", "concluida", "cancelada"]
     if dados.status_vi not in status_permitidos:
-        raise HTTPException(status_code=400, detail=f"Status inválido! Escolha entre: {status_permitidos}")
+        raise HTTPException(
+            status_code=400,
+            detail=f"Status inválido! Escolha entre: {status_permitidos}"
+        )
 
-    sucesso = atualizar_viagem_concluida(id_viagem, dados.status_vi, dados.data_hora_chegada)
+    viagem = buscar_viagem_por_id(id_viagem)
+    if not viagem:
+        raise HTTPException(status_code=404, detail="Viagem não encontrada.")
+
+    sucesso = atualizar_viagem_concluida(
+        id_viagem,
+        dados.status_vi,
+        dados.data_hora_chegada
+    )
     if not sucesso:
-        raise HTTPException(status_code=500, detail="Erro ao atualizar status no banco de dados.")
+        raise HTTPException(status_code=500, detail="Erro ao atualizar status da viagem.")
 
-    if dados.data_hora_chegada is not None:
-        sucesso = atualizar_viagem_concluida(id_viagem, dados.status_vi, dados.data_hora_chegada)
-        if not sucesso:
-            raise HTTPException(status_code=500, detail="Erro ao registrar a chegada no banco de dados.")
+    # Status do veículo é automático:
+    # agendada/em andamento -> em viagem
+    # concluída/cancelada   -> disponível
+    if dados.status_vi in ["agendada", "em_andamento"]:
+        status_veiculo = "em_viagem"
+    else:
+        status_veiculo = "disponivel"
 
-    return {"mensagem": "Viagem atualizada com sucesso!"}
+    if not atualizar_status_veiculo(viagem["id_veiculo"], status_veiculo):
+        raise HTTPException(status_code=500, detail="Erro ao atualizar status do veículo.")
+
+    return {"mensagem": "Viagem e veículo atualizados com sucesso!"}
 
 
 @app.delete("/trips/{id_viagem}")
@@ -209,7 +225,7 @@ def atualizar_veiculo(id_veiculo: int, dados: VeiculoSchema):
 
 @app.patch("/vehicles/{id_veiculo}/status")
 def rota_atualizar_status_veiculo(id_veiculo: int, novo_status_ve: str = Body(embed=True)):
-    status_permitidos = ['em_viagem', 'em_manutencao', 'disponivel']
+    status_permitidos = ['disponivel', 'em_manutencao']
     if novo_status_ve not in status_permitidos:
         raise HTTPException(status_code=400, detail=f"Status inválido! Escolha entre: {status_permitidos}")
         

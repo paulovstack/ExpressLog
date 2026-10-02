@@ -1,5 +1,5 @@
 from models.motorista import buscar_motorista_por_id_banco
-from models.veiculo import buscar_veiculo_por_id
+from models.veiculo import buscar_veiculo_por_id, atualizar_status_veiculo
 from models.viagem import inserir_viagem, verificar_viagem_existente
 from datetime import datetime, timezone
 import dateutil.parser
@@ -16,6 +16,11 @@ def agendar_viagem(id_motorista, id_veiculo, peso_carga_kg, origem, destino, dat
     veiculo = buscar_veiculo_por_id(id_veiculo)
     if not veiculo:     
         return {"erro": "Veículo não encontrado"},404
+
+    # O status "em_viagem" é controlado automaticamente pelo sistema.
+    # Um veículo em manutenção ou já alocado não pode receber novo agendamento.
+    if veiculo.get("status_ve") != "disponivel":
+        return {"erro": "Agendamento não permitido! O veículo precisa estar disponível."}, 400
 
     try:
         if isinstance(data_hora_saida, str):
@@ -61,6 +66,9 @@ def agendar_viagem(id_motorista, id_veiculo, peso_carga_kg, origem, destino, dat
     # ETAPA 3: Se todas as validações forem bem-sucedidas, insira a viagem no banco de dados.
     sucesso = inserir_viagem(id_motorista, id_veiculo,peso_carga_kg, origem, destino, data_hora_saida, data_hora_chegada)
     if sucesso:
+        # Ao ser alocado em uma viagem, o veículo deixa de ficar disponível.
+        if not atualizar_status_veiculo(id_veiculo, "em_viagem"):
+            return {"erro": "A viagem foi criada, mas não foi possível atualizar o status do veículo."}, 500
         return {"mensagem": "Viagem agendada com sucesso!"}, 201
 
     return {"erro": "Falha ao agendar viagem."}, 500
