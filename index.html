@@ -1153,7 +1153,7 @@ $("#tripsBody").addEventListener("click", async e => {
     const t = trips.find(x => x.id_viagem == id);
     if (t) t.status_vi = "em_andamento";
     renderTrips(); renderStats();
-    await loadVehicles();
+    await loadLookups();
     toast("Rota iniciada");
   } catch (err) {
     toast(err.message, true);
@@ -1182,7 +1182,7 @@ $("#tripsBody").addEventListener("click", async e => {
     const t = trips.find(x => x.id_viagem == id);
     if (t) { t.status_vi = "concluida"; t.data_hora_chegada = agora; }
     renderTrips(); renderStats();
-    await loadVehicles();
+    await loadLookups();
     toast("Viagem concluída — chegada registrada");
   } catch (err) {
     toast(err.message, true);
@@ -1210,7 +1210,7 @@ $("#tripsBody").addEventListener("click", async e => {
     const t = trips.find(x => x.id_viagem == id);
     if (t) t.status_vi = "cancelada";
     renderTrips(); renderStats();
-    await loadVehicles();
+    await loadLookups();
     toast("Viagem cancelada");
   } catch (err) {
     toast(err.message, true);
@@ -1281,7 +1281,7 @@ $("#tripForm").addEventListener("submit", async e => {
     $("#tripForm").reset();
     toast("Viagem agendada com sucesso");
     trips = [];
-    await loadVehicles();
+    await loadLookups();
     setApiStatus(true);
     activateTab("dashboard");
   } catch (err) {
