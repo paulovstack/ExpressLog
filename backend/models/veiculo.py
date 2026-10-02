@@ -6,7 +6,7 @@ def inserir_veiculo(placa, modelo, categoria_requerida, capacidade_carga_kg):
         with conexao.cursor() as cursor:
           
             sql = """
-                INSERT INTO veiculo (placa, modelo, categoria_requerida, capacidade_carga_kg, status_ve) 
+                INSERT INTO Veiculo (placa, modelo, categoria_requerida, capacidade_carga_kg, status_ve) 
                 VALUES (%s, %s, %s, %s, 'disponivel')
             """
             cursor.execute(sql, (placa, modelo, categoria_requerida, capacidade_carga_kg))
