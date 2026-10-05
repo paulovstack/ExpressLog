@@ -259,10 +259,11 @@
     #vehiclesBody td:nth-child(1)::before { content: "ID"; }
     #vehiclesBody td:nth-child(2)::before { content: "Placa"; }
     #vehiclesBody td:nth-child(3)::before { content: "Modelo"; }
-    #vehiclesBody td:nth-child(4)::before { content: "Categoria"; }
-    #vehiclesBody td:nth-child(5)::before { content: "Capacidade"; }
-    #vehiclesBody td:nth-child(6)::before { content: "Status"; }
-    #vehiclesBody td:nth-child(7)::before { content: "Ações"; }
+    #vehiclesBody td:nth-child(4)::before { content: "Ano"; }
+    #vehiclesBody td:nth-child(5)::before { content: "Categoria"; }
+    #vehiclesBody td:nth-child(6)::before { content: "Capacidade"; }
+    #vehiclesBody td:nth-child(7)::before { content: "Status"; }
+    #vehiclesBody td:nth-child(8)::before { content: "Ações"; }
 
     /* Skeleton/erros que usam colspan continuam legíveis. */
     #tripsBody td[colspan], #driversBody td[colspan], #vehiclesBody td[colspan] {
@@ -311,6 +312,7 @@
     </button>
 
     <nav class="flex items-center gap-1 bg-base-850 border border-base-700/60 rounded-full p-1" id="tabs">
+      <button data-tab="inicio" class="tab-btn px-4 py-1.5 text-sm rounded-full font-medium transition-colors">Início</button>
       <button data-tab="dashboard" class="tab-btn px-4 py-1.5 text-sm rounded-full font-medium transition-colors">Painel de viagens</button>
       <button data-tab="novo" class="tab-btn px-4 py-1.5 text-sm rounded-full font-medium transition-colors">Novo agendamento</button>
       <button data-tab="consultas" class="tab-btn px-4 py-1.5 text-sm rounded-full font-medium transition-colors">Motoristas &amp; veículos</button>
@@ -325,6 +327,53 @@
 </header>
 
 <main class="max-w-7xl mx-auto px-6 py-8">
+
+  <!-- ===================== TAB: INÍCIO ===================== -->
+  <section data-tab-panel="inicio" class="tab-panel space-y-7">
+    <div class="relative overflow-hidden rounded-2xl border border-base-700/60 bg-base-850 shadow-card min-h-[390px]">
+      <div class="absolute inset-0 bg-gradient-to-r from-base-950 via-base-900/95 to-base-850/55 z-10"></div>
+      <div class="absolute inset-0 opacity-35" aria-hidden="true">
+        <svg viewBox="0 0 1200 500" class="w-full h-full object-cover" preserveAspectRatio="xMidYMid slice">
+          <defs><linearGradient id="road" x1="0" x2="1"><stop offset="0" stop-color="#18212E"/><stop offset="1" stop-color="#2F7DF0"/></linearGradient></defs>
+          <rect width="1200" height="500" fill="#101824"/>
+          <path d="M0 390 C250 330 480 360 720 315 C920 280 1080 290 1200 260 L1200 500 L0 500Z" fill="url(#road)" opacity=".6"/>
+          <path d="M520 348 C760 305 950 306 1200 276" fill="none" stroke="#fff" stroke-opacity=".28" stroke-width="5" stroke-dasharray="34 28"/>
+          <g transform="translate(755 180) scale(1.45)" fill="none" stroke="#8CB6F8" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="0" y="45" width="155" height="85" rx="8" fill="#18212E"/><path d="M155 72h55l45 45v13H155z" fill="#243040"/>
+            <path d="M177 75v34h58"/><circle cx="48" cy="139" r="18" fill="#0F1620"/><circle cx="207" cy="139" r="18" fill="#0F1620"/>
+          </g>
+        </svg>
+      </div>
+      <div class="relative z-20 max-w-2xl p-7 sm:p-10 lg:p-12 flex flex-col justify-center min-h-[390px]">
+        <span class="text-xs font-semibold uppercase tracking-[.18em] text-route-300">Gestão inteligente de transportes</span>
+        <h1 class="font-display text-3xl sm:text-5xl font-700 text-white mt-4 leading-tight">Movendo cargas. Conectando destinos.</h1>
+        <p class="text-sm sm:text-base text-slate-300 mt-4 leading-relaxed max-w-xl">Controle sua frota, motoristas e viagens em uma operação organizada, segura e pronta para seguir em frente.</p>
+        <div class="flex flex-wrap gap-3 mt-7">
+          <button type="button" data-go-tab="novo" class="bg-route-500 hover:bg-route-400 text-white text-sm font-medium rounded-lg px-5 py-2.5 transition-colors">Novo agendamento</button>
+          <button type="button" data-go-tab="dashboard" class="bg-base-800/80 hover:bg-base-700 border border-base-600 text-white text-sm font-medium rounded-lg px-5 py-2.5 transition-colors">Ver painel de viagens</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="bg-base-850 border border-base-700/60 rounded-xl p-5 shadow-card"><p class="text-xs text-slate-400 uppercase tracking-wide">Frota cadastrada</p><p id="homeVehicles" class="font-display text-3xl font-700 text-white mt-2">—</p></div>
+      <div class="bg-base-850 border border-base-700/60 rounded-xl p-5 shadow-card"><p class="text-xs text-slate-400 uppercase tracking-wide">Motoristas ativos</p><p id="homeDrivers" class="font-display text-3xl font-700 text-white mt-2">—</p></div>
+      <div class="bg-base-850 border border-base-700/60 rounded-xl p-5 shadow-card"><p class="text-xs text-slate-400 uppercase tracking-wide">Em andamento</p><p id="homeInProgress" class="font-display text-3xl font-700 text-white mt-2">—</p></div>
+      <div class="bg-base-850 border border-base-700/60 rounded-xl p-5 shadow-card"><p class="text-xs text-slate-400 uppercase tracking-wide">Concluídas</p><p id="homeCompleted" class="font-display text-3xl font-700 text-white mt-2">—</p></div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+      <div class="lg:col-span-2 bg-base-850 border border-base-700/60 rounded-xl p-6 shadow-card">
+        <p class="text-xs text-route-400 font-semibold uppercase tracking-wide">Nossa operação</p>
+        <h2 class="font-display text-xl font-600 text-white mt-2">Tudo que a frota precisa em um só lugar.</h2>
+        <p class="text-sm text-slate-400 mt-3 leading-relaxed">O ExpressLog centraliza motoristas, veículos, rotas e agendamentos para facilitar o acompanhamento da operação e reduzir conflitos durante o planejamento das viagens.</p>
+      </div>
+      <div class="bg-route-500/10 border border-route-500/30 rounded-xl p-6 flex flex-col justify-center">
+        <p class="font-display text-lg font-600 text-white">Cada rota começa com uma boa decisão.</p>
+        <p class="text-sm text-slate-400 mt-2">Planeje, acompanhe e mantenha sua operação em movimento.</p>
+      </div>
+    </div>
+  </section>
 
   <!-- ===================== TAB: DASHBOARD ===================== -->
   <section data-tab-panel="dashboard" class="tab-panel space-y-6">
@@ -360,9 +409,15 @@
     </div>
 
     <div class="flex flex-col sm:flex-row gap-3 sm:items-center">
+      <select id="tripSearchType" class="bg-base-850 border border-base-700/60 rounded-full px-4 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-route-500">
+        <option value="id">ID</option>
+        <option value="motorista">Motorista</option>
+        <option value="veiculo">Veículo</option>
+        <option value="rota">Rota</option>
+      </select>
       <div class="relative flex-1 max-w-xs">
         <svg viewBox="0 0 24 24" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
-        <input id="tripSearch" type="search" placeholder="Buscar por rota, ID, motorista ou veículo" class="w-full bg-base-850 border border-base-700/60 rounded-full pl-9 pr-4 py-2 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-route-500 focus:border-route-500">
+        <input id="tripSearch" type="search" placeholder="Digite o ID da viagem" class="w-full bg-base-850 border border-base-700/60 rounded-full pl-9 pr-4 py-2 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-route-500 focus:border-route-500">
       </div>
       <div class="flex items-center gap-1.5 flex-wrap" id="statusChips"></div>
     </div>
@@ -527,6 +582,7 @@
                 <th class="px-5 py-2.5 font-medium">ID</th>
                 <th class="px-5 py-2.5 font-medium">Placa</th>
                 <th class="px-5 py-2.5 font-medium">Modelo</th>
+                <th class="px-5 py-2.5 font-medium">Ano</th>
                 <th class="px-5 py-2.5 font-medium">Cat.</th>
                 <th class="px-5 py-2.5 font-medium">Capacidade</th>
                 <th class="px-5 py-2.5 font-medium">Status</th>
@@ -927,7 +983,7 @@ const ESTADOS_BRASILEIROS = [
 ];
 
 let trips = [], drivers = [], vehicles = [];
-let tripFilter = { status: "todas", q: "" };
+let tripFilter = { status: "todas", tipo: "id", q: "" };
 let driverFilter = { status: "todos", q: "" };
 let vehicleFilter = { status: "todos", q: "" };
 
@@ -963,8 +1019,9 @@ function activateTab(name) {
     b.classList.toggle("text-slate-400", !on);
   });
   $$("[data-tab-panel]").forEach(p => p.classList.toggle("hidden", p.dataset.tabPanel !== name));
-  if (name === "dashboard" && !trips.length) loadTrips();
-  if (name === "consultas" || name === "novo") loadLookups();
+  if ((name === "dashboard" || name === "inicio") && !trips.length) loadTrips();
+  if (name === "consultas" || name === "novo" || name === "inicio") loadLookups();
+  if (name === "inicio") renderHomeStats();
   if (name === "cadastro") mostrarEscolhaCadastro();
 }
 $("#tabs").addEventListener("click", e => {
@@ -977,7 +1034,7 @@ document.addEventListener("click", e => {
   if (b) activateTab(b.dataset.goTab);
 });
 document.addEventListener("click", e => {
-  if (e.target.closest("[data-close-tab]")) activateTab("dashboard");
+  if (e.target.closest("[data-close-tab]")) activateTab("inicio");
 });
 
 /* ---------- cadastro: escolha motorista ou veículo ---------- */
@@ -1111,7 +1168,30 @@ $("#statusChips").addEventListener("click", e => {
   renderStatusChips();
   renderTrips();
 });
+const TRIP_SEARCH_PLACEHOLDERS = {
+  id: "Digite o ID da viagem",
+  motorista: "Digite o nome do motorista",
+  veiculo: "Digite o modelo do veículo",
+  rota: "Digite a origem ou destino"
+};
+$("#tripSearchType").addEventListener("change", e => {
+  tripFilter.tipo = e.target.value;
+  tripFilter.q = "";
+  $("#tripSearch").value = "";
+  $("#tripSearch").placeholder = TRIP_SEARCH_PLACEHOLDERS[tripFilter.tipo];
+  renderTrips();
+});
 $("#tripSearch").addEventListener("input", e => { tripFilter.q = e.target.value.trim().toLowerCase(); renderTrips(); });
+
+
+function renderHomeStats() {
+  const elVehicles = $("#homeVehicles"), elDrivers = $("#homeDrivers"), elProgress = $("#homeInProgress"), elCompleted = $("#homeCompleted");
+  if (!elVehicles) return;
+  elVehicles.textContent = vehicles.length || 0;
+  elDrivers.textContent = drivers.filter(d => (d.status_m || "ativo") === "ativo").length;
+  elProgress.textContent = trips.filter(t => t.status_vi === "em_andamento").length;
+  elCompleted.textContent = trips.filter(t => t.status_vi === "concluida").length;
+}
 
 function renderStats() {
   const motoristasAtivos = new Set(trips.filter(t => t.status_vi === "em_andamento" || t.status_vi === "agendada").map(t => t.id_motorista)).size;
@@ -1119,6 +1199,7 @@ function renderStats() {
   $(`[data-stat="total"]`).textContent = trips.length;
   $(`[data-stat="motoristas"]`).textContent = motoristasAtivos;
   $(`[data-stat="veiculos"]`).textContent = veiculosEmViagem;
+  renderHomeStats();
 }
 
 function viagensFiltradas() {
@@ -1126,9 +1207,11 @@ function viagensFiltradas() {
   return trips.filter(t => {
     if (tripFilter.status !== "todas" && t.status_vi !== tripFilter.status) return false;
     if (!q) return true;
-    return String(t.id_viagem).includes(q) || String(t.id_motorista).includes(q) || String(t.id_veiculo).includes(q)
-      || (t.origem || "").toLowerCase().includes(q) || (t.destino || "").toLowerCase().includes(q)
-      || (t.nome_motorista || "").toLowerCase().includes(q) || (t.modelo_veiculo || "").toLowerCase().includes(q);
+    if (tripFilter.tipo === "id") return String(t.id_viagem).includes(q);
+    if (tripFilter.tipo === "motorista") return (t.nome_motorista || "").toLowerCase().includes(q);
+    if (tripFilter.tipo === "veiculo") return (t.modelo_veiculo || "").toLowerCase().includes(q);
+    if (tripFilter.tipo === "rota") return (t.origem || "").toLowerCase().includes(q) || (t.destino || "").toLowerCase().includes(q);
+    return true;
   });
 }
 
@@ -1469,7 +1552,7 @@ async function loadLookups() {
   else $("#driversBody").innerHTML = `<tr><td colspan="7" class="px-5 py-8 text-center text-slate-400 text-sm">${driversRes.reason.message}</td></tr>`;
 
   if (vehiclesRes.status === "fulfilled") { vehicles = vehiclesRes.value; renderVehicles(); renderTripVehicleOptions(); }
-  else $("#vehiclesBody").innerHTML = `<tr><td colspan="7" class="px-5 py-8 text-center text-slate-400 text-sm">${vehiclesRes.reason.message}</td></tr>`;
+  else $("#vehiclesBody").innerHTML = `<tr><td colspan="8" class="px-5 py-8 text-center text-slate-400 text-sm">${vehiclesRes.reason.message}</td></tr>`;  renderHomeStats();
 }
 
 function renderTripDriverOptions() {
@@ -1478,7 +1561,7 @@ function renderTripDriverOptions() {
   const atual = select.value;
   const disponiveis = drivers.filter(d => (d.status_m || "ativo") === "ativo");
   select.innerHTML = `<option value="">Selecione um motorista</option>` + disponiveis.map(d =>
-    `<option value="${d.id_motorista}">#${d.id_motorista} — ${esc(d.nome || "Sem nome")}</option>`
+    `<option value="${d.id_motorista}">(ID: ${d.id_motorista}) ${esc(d.nome || "Sem nome")}</option>`
   ).join("");
   if ([...select.options].some(o => o.value === atual)) select.value = atual;
 }
@@ -1489,7 +1572,7 @@ function renderTripVehicleOptions() {
   const atual = select.value;
   const disponiveis = vehicles.filter(v => (v.status_ve || v.status_v || "disponivel") === "disponivel");
   select.innerHTML = `<option value="">Selecione um veículo</option>` + disponiveis.map(v =>
-    `<option value="${v.id_veiculo}">#${v.id_veiculo} — ${esc(v.modelo || "Sem modelo")} — ${v.ano ?? "ano não informado"}</option>`
+    `<option value="${v.id_veiculo}">(ID: ${v.id_veiculo}) ${esc(v.modelo || "Sem modelo")}</option>`
   ).join("");
   if ([...select.options].some(o => o.value === atual)) select.value = atual;
 }
@@ -1549,6 +1632,7 @@ function renderVehicles() {
       <td class="px-5 py-2.5 font-medium text-white">#${v.id_veiculo}</td>
       <td class="px-5 py-2.5 text-slate-300">${esc(v.placa)}</td>
       <td class="px-5 py-2.5 text-slate-300">${esc(v.modelo)}</td>
+      <td class="px-5 py-2.5 text-slate-300 tabular-nums">${esc(v.ano ?? "—")}</td>
       <td class="px-5 py-2.5 text-slate-300">${esc(v.categoria_requerida)}</td>
       <td class="px-5 py-2.5 text-slate-400 tabular-nums">${fmtKg(v.capacidade_carga_kg)}</td>
       <td class="px-5 py-2.5">
@@ -1752,7 +1836,7 @@ $("#editVehicleForm").addEventListener("submit", async e => {
 });
 
 /* ---------- init ---------- */
-activateTab("dashboard");
+activateTab("inicio");
 loadTrips();
 
 /* menu mobile */
