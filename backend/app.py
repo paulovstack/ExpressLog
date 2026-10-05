@@ -7,7 +7,7 @@ import re
 from controllers.controller import agendar_viagem
 from models.motorista import inserir_motorista_banco, buscar_motorista_por_id_banco, atualizar_motorista_banco, atualizar_status_motorista_banco, listar_todos_motoristas_banco, deletar_motorista_banco
 from models.veiculo import listar_todos_veiculos, inserir_veiculo, atualizar_veiculo_banco, atualizar_status_veiculo,buscar_veiculo_por_id, deletar_veiculo_banco, listar_todos_veiculos, deletar_veiculo_banco
-from models.viagem import listar_todas_viagens, atualizar_viagem_concluida, deletar_viagem_banco, buscar_viagem_por_id
+from models.viagem import listar_todas_viagens, atualizar_viagem_concluida, deletar_viagem_banco, buscar_viagem_por_id, motorista_em_viagem
 
 app = FastAPI(title="ExpressLog API", description="API de Gerenciamento de Viagens")
 app.add_middleware(
@@ -234,7 +234,12 @@ def rota_atualizar_status_motorista(id_motorista: int, novo_status_m: str = Body
     status_permitidos = ['ativo', 'inativo']
     if novo_status_m not in status_permitidos:
         raise HTTPException(status_code=400, detail=f"Status inválido! Escolha entre: {status_permitidos}")
-        
+
+
+    if novo_status_m == "inativo:
+       if motorista_em_viagem(id_motorista)
+          raise HTTPException(status_code=409, detail="Não é possível inativar o motorista enquanto ele estiver em rota.")
+       
     sucesso = atualizar_status_motorista_banco(id_motorista, novo_status_m)
     if not sucesso:
         raise HTTPException(status_code=500, detail="Erro ao atualizar status do motorista.")
@@ -297,6 +302,9 @@ def remover_veiculo(id_veiculo: int):
     if not sucesso:
         raise HTTPException(status_code=500, detail="Erro ao tentar deletar o veículo do banco de dados.")
     return {"mensagem": f"Veículo ID {id_veiculo} deletado com sucesso!"}
+
+
+
 
 
 
