@@ -131,7 +131,7 @@ def motorista_em_viagem(id_motorista: int):
 
     except Exception as e:
         print(f"Motorista em viagem e não pode alterar: {e}")
-              return False
+          return False
     finally:
         conexao.close()
        
