@@ -469,6 +469,7 @@
             <input id="id_motorista" type="hidden">
             <div id="motoristaOptions" class="hidden absolute z-30 mt-1 w-full max-h-52 overflow-y-auto bg-base-800 border border-base-600 rounded-lg shadow-card"></div>
           </div>
+          <div id="motoristaInfo" class="hidden mt-2 rounded-lg border border-base-600 bg-base-800/70 p-3 text-xs"></div>
         </div>
         <div>
           <label class="text-xs text-slate-400 block mb-1.5" for="veiculoBusca">Veículo</label>
@@ -477,6 +478,7 @@
             <input id="id_veiculo" type="hidden">
             <div id="veiculoOptions" class="hidden absolute z-30 mt-1 w-full max-h-52 overflow-y-auto bg-base-800 border border-base-600 rounded-lg shadow-card"></div>
           </div>
+          <div id="veiculoInfo" class="hidden mt-2 rounded-lg border border-base-600 bg-base-800/70 p-3 text-xs"></div>
         </div>
       </div>
 
@@ -1447,6 +1449,8 @@ $("#tripForm").addEventListener("submit", async e => {
     $("#tripForm").reset();
     $("#id_motorista").value = "";
     $("#id_veiculo").value = "";
+    limparInfoAgendamento("#motoristaInfo");
+    limparInfoAgendamento("#veiculoInfo");
     toast("Viagem agendada com sucesso");
     trips = [];
     await loadLookups();
@@ -1572,13 +1576,14 @@ function normalizarBuscaRecurso(valor) {
   return (valor || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
 }
 
-function configurarAutocompleteRecurso(inputId, hiddenId, optionsId, getItens, getLabel) {
+function configurarAutocompleteRecurso(inputId, hiddenId, optionsId, getItens, getLabel, onSelect, onClear) {
   const input = $(inputId), hidden = $(hiddenId), box = $(optionsId);
   if (!input || !hidden || !box || input.dataset.autocompleteReady) return;
   input.dataset.autocompleteReady = "1";
 
   const render = () => {
     hidden.value = "";
+    if (onClear) onClear();
     const q = normalizarBuscaRecurso(input.value);
     const lista = getItens().filter(item => normalizarBuscaRecurso(getLabel(item)).includes(q));
     box.innerHTML = lista.length
@@ -1598,21 +1603,67 @@ function configurarAutocompleteRecurso(inputId, hiddenId, optionsId, getItens, g
     hidden.value = item.id;
     input.value = item.label;
     box.classList.add("hidden");
+    if (onSelect) onSelect(item);
   });
   input.addEventListener("blur", () => setTimeout(() => box.classList.add("hidden"), 120));
+}
+
+function limparInfoAgendamento(id) {
+  const box = $(id);
+  if (!box) return;
+  box.classList.add("hidden");
+  box.innerHTML = "";
+}
+
+function mostrarInfoMotorista(item) {
+  const d = drivers.find(x => String(x.id_motorista) === String(item.id));
+  const box = $("#motoristaInfo");
+  if (!d || !box) return;
+  box.innerHTML = `
+    <p class="font-medium text-white">${esc(d.nome || "Sem nome")}</p>
+    <div class="grid grid-cols-2 gap-x-3 gap-y-1 mt-2 text-slate-400">
+      <span>ID: <strong class="text-slate-200">${esc(d.id_motorista)}</strong></span>
+      <span>CNH: <strong class="text-slate-200">${esc(d.cnh || "—")}</strong></span>
+      <span>Categoria: <strong class="text-slate-200">${esc(d.categoria_cnh || "—")}</strong></span>
+      <span>Pontos: <strong class="text-slate-200">${esc(d.pontos_cnh ?? 0)}</strong></span>
+      <span>Status: <strong class="text-emerald-300">${esc((DRIVER_STATUS_MAP[d.status_m] || DRIVER_STATUS_MAP.ativo).label)}</strong></span>
+    </div>`;
+  box.classList.remove("hidden");
+}
+
+function mostrarInfoVeiculo(item) {
+  const v = vehicles.find(x => String(x.id_veiculo) === String(item.id));
+  const box = $("#veiculoInfo");
+  if (!v || !box) return;
+  const status = v.status_ve || v.status_v || "disponivel";
+  box.innerHTML = `
+    <p class="font-medium text-white">${esc(v.modelo || "Sem modelo")}</p>
+    <div class="grid grid-cols-2 gap-x-3 gap-y-1 mt-2 text-slate-400">
+      <span>ID: <strong class="text-slate-200">${esc(v.id_veiculo)}</strong></span>
+      <span>Placa: <strong class="text-slate-200">${esc(v.placa || "—")}</strong></span>
+      <span>Ano: <strong class="text-slate-200">${esc(v.ano ?? "—")}</strong></span>
+      <span>Categoria: <strong class="text-slate-200">${esc(v.categoria_requerida || "—")}</strong></span>
+      <span>Capacidade: <strong class="text-slate-200">${fmtKg(v.capacidade_carga_kg)}</strong></span>
+      <span>Status: <strong class="text-emerald-300">${esc((VEHICLE_STATUS_MAP[status] || VEHICLE_STATUS_MAP.disponivel).label)}</strong></span>
+    </div>`;
+  box.classList.remove("hidden");
 }
 
 function renderTripDriverOptions() {
   configurarAutocompleteRecurso("#motoristaBusca", "#id_motorista", "#motoristaOptions",
     () => drivers.filter(d => (d.status_m || "ativo") === "ativo").map(d => ({ id: d.id_motorista, label: `(ID: ${d.id_motorista}) ${d.nome || "Sem nome"}` })),
-    item => item.label
+    item => item.label,
+    mostrarInfoMotorista,
+    () => limparInfoAgendamento("#motoristaInfo")
   );
 }
 
 function renderTripVehicleOptions() {
   configurarAutocompleteRecurso("#veiculoBusca", "#id_veiculo", "#veiculoOptions",
     () => vehicles.filter(v => (v.status_ve || v.status_v || "disponivel") === "disponivel").map(v => ({ id: v.id_veiculo, label: `(ID: ${v.id_veiculo}) ${v.modelo || "Sem modelo"}` })),
-    item => item.label
+    item => item.label,
+    mostrarInfoVeiculo,
+    () => limparInfoAgendamento("#veiculoInfo")
   );
 }
 
