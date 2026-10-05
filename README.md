@@ -1,247 +1,206 @@
-# 🚚 ExpressLog
+# ExpressLog
 
-### Sistema web para gerenciamento de frota e controle de viagens
+Sistema de gerenciamento de transporte desenvolvido para praticar conceitos de **Back-End, APIs REST, banco de dados e integração com Front-End**.
 
-O **ExpressLog** é um projeto desenvolvido para facilitar o gerenciamento de **motoristas, veículos e viagens** em uma única aplicação.
+O ExpressLog permite cadastrar motoristas e veículos, criar viagens e acompanhar as operações da frota por meio de um painel.
 
-O sistema possui uma interface web integrada a uma API desenvolvida com **FastAPI** e utiliza **MySQL** para armazenamento dos dados. O projeto também foi publicado na nuvem, permitindo acessar o sistema diretamente pelo navegador.
+## Sobre o projeto
 
-> Projeto desenvolvido com foco em praticar desenvolvimento **Full Stack**, integração com banco de dados, criação de API REST e deploy de uma aplicação web.
+O projeto surgiu durante meus estudos de **Análise e Desenvolvimento de Sistemas** e da minha formação em **Back-End**.
 
----
+A ideia é desenvolver uma aplicação completa e, ao mesmo tempo, colocar em prática assuntos que venho estudando, como:
 
-## 🌐 Sistema online
+- Python e Programação Orientada a Objetos
+- FastAPI
+- APIs REST
+- MySQL
+- Regras de negócio
+- Validação de dados
+- Integração entre Front-End, API e banco de dados
+- Git e GitHub
+- Deploy de aplicações
 
-🔗 **Acesse o ExpressLog:**  
-https://paulovstack.github.io/ExpressLog/
+O projeto continua em desenvolvimento e novas funcionalidades serão adicionadas conforme avanço nos estudos.
 
-🔗 **Documentação da API (Swagger):**  
-https://expresslog-pwur.onrender.com/docs
+## Tecnologias utilizadas
 
-> **Observação:** o backend utiliza hospedagem gratuita no Render. Por isso, após algum tempo sem uso, a primeira requisição pode levar alguns segundos enquanto o serviço é iniciado novamente.
+### Back-End
+- Python
+- FastAPI
+- Pydantic
+- PyMySQL
 
----
+### Banco de dados
+- MySQL
+- Aiven
 
-## 📌 Funcionalidades
+### Front-End
+- HTML
+- CSS / Tailwind CSS
+- JavaScript
 
-### 👨‍✈️ Motoristas
+### Deploy
+- Render — API
+- GitHub Pages — Front-End
+
+## Funcionalidades
+
+### Motoristas
 - Cadastro de motoristas
 - Consulta dos motoristas cadastrados
-- Edição de informações
+- Edição dos dados
 - Alteração de status
+- Controle de pontos da CNH
+- Validação da categoria da CNH
 - Exclusão de registros
-- Controle de categoria da CNH
 
-### 🚛 Veículos
+### Veículos
 - Cadastro de veículos
 - Consulta da frota
 - Edição dos dados
 - Controle de capacidade de carga
-- Controle de categoria exigida
-- Alteração de status
+- Categoria de CNH exigida
+- Controle de status do veículo
+- Cadastro do ano do veículo
 - Exclusão de registros
 
-### 🗺️ Viagens
+### Viagens
 - Criação de novos agendamentos
-- Definição de origem e destino
 - Associação entre motorista e veículo
-- Registro do peso da carga
-- Controle da data e hora de saída
-- Início da rota
-- Conclusão ou cancelamento da viagem
-- Registro da chegada
-- Consulta e filtro das viagens por status
+- Definição de origem e destino
+- Controle do peso da carga
+- Data e horário de saída
+- Início, conclusão e cancelamento de viagens
+- Controle automático do status do veículo
+- Validação de conflitos de motorista e veículo
 
-### 📊 Painel
-- Total de viagens
-- Motoristas ativos
-- Veículos em viagem
-- Busca de viagens
-- Filtros por status
+## Novas atualizações
 
----
+Nesta versão, o ExpressLog recebeu melhorias principalmente no cadastro de veículos, no agendamento e no painel de viagens.
 
-## 📱 Interface responsiva
+### Ano do veículo
 
-A interface foi preparada para funcionar em **computadores e dispositivos móveis**.
+Agora cada veículo possui também o campo **ano**. O dado é salvo no banco e utilizado durante a seleção do veículo no agendamento.
 
-No desktop, o sistema utiliza o painel completo com tabelas. Em telas menores, a navegação é adaptada para um menu mobile e as informações são organizadas para facilitar a consulta pelo celular.
+### Motorista identificado pelo nome
 
----
+No novo agendamento, não é mais necessário trabalhar apenas olhando o ID do motorista. A seleção apresenta o **ID junto com o nome**, facilitando a identificação.
 
-## 🛠️ Tecnologias utilizadas
+Exemplo:
 
-| Tecnologia | Utilização |
-| --- | --- |
-| **Python** | Linguagem utilizada no backend |
-| **FastAPI** | Desenvolvimento da API REST |
-| **MySQL** | Banco de dados relacional |
-| **PyMySQL** | Comunicação entre Python e MySQL |
-| **HTML** | Estrutura da interface |
-| **CSS / Tailwind CSS** | Estilização e responsividade |
-| **JavaScript** | Integração do frontend com a API |
-| **Git / GitHub** | Versionamento e armazenamento do projeto |
-| **GitHub Pages** | Hospedagem do frontend |
-| **Render** | Hospedagem da API |
-| **Aiven** | Hospedagem do banco MySQL |
+```text
+#4 — Marino Junior
+```
 
----
+### Veículo identificado pelo modelo e ano
 
-## ⚙️ Como o projeto funciona
+A seleção do veículo apresenta informações mais fáceis de reconhecer:
+
+```text
+#4 — Mercedes Actros — 2024
+```
+
+O ID continua sendo utilizado internamente pela API para relacionar os registros.
+
+### Origem e destino por estados brasileiros
+
+Os campos de origem e destino agora trabalham com os estados brasileiros no formato:
+
+```text
+Rio de Janeiro - RJ
+São Paulo - SP
+Minas Gerais - MG
+```
+
+Ao começar a digitar, o sistema filtra os estados correspondentes. Por exemplo, ao digitar `R`, são apresentadas opções como Rio de Janeiro, Rio Grande do Norte, Rio Grande do Sul, Rondônia e Roraima.
+
+O usuário precisa selecionar um estado válido e o Back-End também faz a validação dos dados recebidos.
+
+O sistema ainda impede que **origem e destino sejam iguais**.
+
+### Painel de viagens mais fácil de entender
+
+O painel passou a apresentar o **nome do motorista** e o **modelo do veículo**, em vez de mostrar somente os respectivos IDs.
+
+Isso foi feito no Back-End utilizando relacionamento entre as tabelas para retornar informações mais completas sobre cada viagem.
+
+### Busca aprimorada
+
+A pesquisa do painel pode localizar viagens utilizando informações como:
+
+- ID da viagem
+- Origem
+- Destino
+- Nome do motorista
+- Modelo do veículo
+
+## Algumas regras de negócio
+
+O ExpressLog possui validações para evitar operações incorretas. Entre elas:
+
+- O motorista precisa possuir categoria de CNH compatível com o veículo.
+- Motoristas inativos ou que não atendam às regras de pontuação não podem ser utilizados normalmente em viagens.
+- O peso da carga não pode ultrapassar a capacidade cadastrada do veículo.
+- Um motorista não pode ser utilizado em viagens conflitantes no mesmo horário.
+- Um veículo não pode ser utilizado em viagens conflitantes no mesmo horário.
+- Origem e destino precisam ser estados brasileiros válidos.
+- Origem e destino não podem ser iguais.
+- Veículos envolvidos em uma viagem têm seu status controlado pelo sistema.
+
+## Estrutura geral
+
+De forma simplificada, o sistema funciona assim:
 
 ```text
 Usuário
-   │
-   ▼
-Frontend
-GitHub Pages
-   │
-   │ Requisições HTTP
-   ▼
-API REST
-FastAPI / Render
-   │
-   ▼
-Banco de Dados
-MySQL / Aiven
+   ↓
+Front-End
+   ↓
+API FastAPI
+   ↓
+Regras de negócio
+   ↓
+MySQL
 ```
 
-O navegador envia as solicitações para a API. O backend processa as regras do sistema, acessa o banco MySQL e devolve as informações para a interface.
+O Front-End envia as informações para a API. A API valida os dados e as regras de negócio antes de realizar as operações no banco de dados.
 
----
+## Banco de dados
 
-## 📁 Estrutura do projeto
+O projeto trabalha principalmente com três entidades:
 
 ```text
-ExpressLog/
-├── backend/
-│   ├── app.py
-│   ├── database.py
-│   ├── requirements.txt
-│   ├── controllers/
-│   │   └── controller.py
-│   └── models/
-│       ├── motorista.py
-│       ├── veiculo.py
-│       └── viagem.py
-├── database/
-│   └── express_bd.sql
-├── index.html
-├── .gitignore
-└── README.md
+Motorista
+   │
+   └──── Viagem ──── Veículo
 ```
 
----
+A tabela de viagens relaciona um motorista e um veículo, permitindo manter o histórico das operações.
 
-## 💻 Executando localmente
+## Executando o projeto
 
-### 1. Banco de dados
+Para executar o Back-End localmente, instale as dependências do projeto e configure as variáveis de ambiente utilizadas na conexão com o banco de dados.
 
-Importe o arquivo:
+Depois, execute a aplicação FastAPI com Uvicorn.
 
-```text
-database/express_bd.sql
-```
-
-em um servidor MySQL.
-
-### 2. Backend
-
-Entre na pasta do backend:
-
-```bash
-cd backend
-```
-
-Instale as dependências:
-
-```bash
-pip install -r requirements.txt
-```
-
-Configure as variáveis de ambiente:
-
-```text
-DB_HOST
-DB_PORT
-DB_USER
-DB_PASSWORD
-DB_NAME
-```
-
-Depois execute:
+Exemplo:
 
 ```bash
 uvicorn app:app --reload
 ```
 
-A API estará disponível localmente em:
+A documentação interativa da API ficará disponível pelo Swagger da aplicação.
 
-```text
-http://127.0.0.1:8000
-```
+## Objetivo
 
-A documentação automática do FastAPI poderá ser acessada em:
+O ExpressLog é um projeto de estudo e portfólio. Meu objetivo é continuar evoluindo o sistema enquanto desenvolvo meus conhecimentos em **Back-End**, principalmente com Python, APIs REST, banco de dados e regras de negócio.
 
-```text
-http://127.0.0.1:8000/docs
-```
+Além de implementar novas funcionalidades, procuro entender os erros encontrados durante o desenvolvimento e o motivo de cada solução aplicada.
 
----
+## Autor
 
-## ☁️ Deploy
+**Paulo Victor Carneiro Tavares**  
+Desenvolvedor Back-End em formação
 
-O ExpressLog utiliza serviços separados para cada parte da aplicação:
-
-```text
-Frontend  → GitHub Pages
-Backend   → Render
-Database  → Aiven MySQL
-```
-
-No Render, o backend utiliza:
-
-```text
-Root Directory: backend
-Build Command: pip install -r requirements.txt
-Start Command: uvicorn app:app --host 0.0.0.0 --port $PORT
-```
-
-As credenciais do banco são configuradas através de **variáveis de ambiente**, evitando armazenar senhas diretamente no código.
-
----
-
-## 🔒 Segurança
-
-Arquivos com credenciais e informações sensíveis não devem ser enviados ao GitHub.
-
-O projeto utiliza variáveis de ambiente para os dados de conexão com o banco. O arquivo `.env` deve permanecer ignorado pelo Git, enquanto um `.env.example` pode ser utilizado apenas como modelo de configuração.
-
----
-
-## 🎯 Objetivo do projeto
-
-O ExpressLog foi desenvolvido como projeto de estudo para colocar em prática conhecimentos de:
-
-- Desenvolvimento backend com Python
-- Criação de APIs REST
-- Integração entre frontend e backend
-- Banco de dados MySQL
-- Operações de cadastro, consulta, edição e exclusão
-- Regras de negócio
-- Desenvolvimento de interface web
-- Responsividade para dispositivos móveis
-- Versionamento com Git e GitHub
-- Deploy de uma aplicação completa na nuvem
-
----
-
-## 🚀 Próximas melhorias
-
-O projeto pode continuar evoluindo com recursos como autenticação de usuários, relatórios, histórico detalhado da frota e novas funcionalidades de gerenciamento.
-
----
-
-## 👨‍💻 Autor
-
-Desenvolvido por **Paulo Victor** como projeto de estudo e evolução em desenvolvimento de software.
+GitHub: paulovstack  
+LinkedIn: paulovtavares

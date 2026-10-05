@@ -362,7 +362,7 @@
     <div class="flex flex-col sm:flex-row gap-3 sm:items-center">
       <div class="relative flex-1 max-w-xs">
         <svg viewBox="0 0 24 24" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
-        <input id="tripSearch" type="search" placeholder="Buscar por rota ou ID" class="w-full bg-base-850 border border-base-700/60 rounded-full pl-9 pr-4 py-2 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-route-500 focus:border-route-500">
+        <input id="tripSearch" type="search" placeholder="Buscar por rota, ID, motorista ou veículo" class="w-full bg-base-850 border border-base-700/60 rounded-full pl-9 pr-4 py-2 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-route-500 focus:border-route-500">
       </div>
       <div class="flex items-center gap-1.5 flex-wrap" id="statusChips"></div>
     </div>
@@ -408,23 +408,33 @@
     <form id="tripForm" class="bg-base-850 border border-base-700/60 rounded-xl shadow-card p-6 space-y-4" novalidate>
       <div class="grid grid-cols-2 gap-4">
         <div>
-          <label class="text-xs text-slate-400 block mb-1.5" for="id_motorista">ID do motorista</label>
-          <input id="id_motorista" type="number" min="1" required class="w-full bg-base-800 border border-base-600 rounded-lg px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-route-500 focus:border-route-500" placeholder="Ex: 4">
+          <label class="text-xs text-slate-400 block mb-1.5" for="id_motorista">Motorista</label>
+          <select id="id_motorista" required class="w-full bg-base-800 border border-base-600 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-route-500 focus:border-route-500">
+            <option value="">Selecione um motorista</option>
+          </select>
         </div>
         <div>
-          <label class="text-xs text-slate-400 block mb-1.5" for="id_veiculo">ID do veículo</label>
-          <input id="id_veiculo" type="number" min="1" required class="w-full bg-base-800 border border-base-600 rounded-lg px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-route-500 focus:border-route-500" placeholder="Ex: 12">
+          <label class="text-xs text-slate-400 block mb-1.5" for="id_veiculo">Veículo</label>
+          <select id="id_veiculo" required class="w-full bg-base-800 border border-base-600 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-route-500 focus:border-route-500">
+            <option value="">Selecione um veículo</option>
+          </select>
         </div>
       </div>
 
       <div class="grid grid-cols-2 gap-4">
         <div>
           <label class="text-xs text-slate-400 block mb-1.5" for="origem">Origem</label>
-          <input id="origem" type="text" required class="w-full bg-base-800 border border-base-600 rounded-lg px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-route-500 focus:border-route-500" placeholder="São Paulo, SP">
+          <div class="relative">
+            <input id="origem" type="text" required autocomplete="off" class="w-full bg-base-800 border border-base-600 rounded-lg px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-route-500 focus:border-route-500" placeholder="Digite para buscar um estado">
+            <div id="origemOptions" class="state-options hidden absolute z-20 mt-1 w-full max-h-52 overflow-y-auto bg-base-800 border border-base-600 rounded-lg shadow-card"></div>
+          </div>
         </div>
         <div>
           <label class="text-xs text-slate-400 block mb-1.5" for="destino">Destino</label>
-          <input id="destino" type="text" required class="w-full bg-base-800 border border-base-600 rounded-lg px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-route-500 focus:border-route-500" placeholder="Curitiba, PR">
+          <div class="relative">
+            <input id="destino" type="text" required autocomplete="off" class="w-full bg-base-800 border border-base-600 rounded-lg px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-route-500 focus:border-route-500" placeholder="Digite para buscar um estado">
+            <div id="destinoOptions" class="state-options hidden absolute z-20 mt-1 w-full max-h-52 overflow-y-auto bg-base-800 border border-base-600 rounded-lg shadow-card"></div>
+          </div>
         </div>
       </div>
 
@@ -611,6 +621,10 @@
               <label class="text-xs text-slate-400 block mb-1.5" for="v_modelo">Modelo</label>
               <input id="v_modelo" type="text" required class="w-full bg-base-800 border border-base-600 rounded-lg px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-route-500 focus:border-route-500" placeholder="Ex: Mercedes Actros">
             </div>
+          </div>
+          <div>
+            <label class="text-xs text-slate-400 block mb-1.5" for="v_ano">Ano</label>
+            <input id="v_ano" type="number" min="2010" max="2027" required class="w-full bg-base-800 border border-base-600 rounded-lg px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-route-500 focus:border-route-500" placeholder="Ex: 2024">
           </div>
           <div class="grid grid-cols-2 gap-4">
             <div>
@@ -837,6 +851,10 @@
         <input id="ev_modelo" type="text" required class="w-full bg-base-800 border border-base-600 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-route-500">
       </div>
     </div>
+    <div>
+      <label class="text-xs text-slate-400 block mb-1.5" for="ev_ano">Ano</label>
+      <input id="ev_ano" type="number" min="2010" max="2027" required class="w-full bg-base-800 border border-base-600 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-route-500">
+    </div>
     <div class="grid grid-cols-2 gap-4">
       <div>
         <label class="text-xs text-slate-400 block mb-1.5" for="ev_categoria_requerida">Cat. exigida</label>
@@ -899,6 +917,15 @@ const VEHICLE_STATUS_MAP = {
   em_manutencao: { label: "Em manutenção", cls: "bg-amber-500/15 text-amber-300 border-amber-500/30" },
 };
 
+const ESTADOS_BRASILEIROS = [
+  "Acre - AC","Alagoas - AL","Amapá - AP","Amazonas - AM","Bahia - BA","Ceará - CE",
+  "Distrito Federal - DF","Espírito Santo - ES","Goiás - GO","Maranhão - MA","Mato Grosso - MT",
+  "Mato Grosso do Sul - MS","Minas Gerais - MG","Pará - PA","Paraíba - PB","Paraná - PR",
+  "Pernambuco - PE","Piauí - PI","Rio de Janeiro - RJ","Rio Grande do Norte - RN",
+  "Rio Grande do Sul - RS","Rondônia - RO","Roraima - RR","Santa Catarina - SC",
+  "São Paulo - SP","Sergipe - SE","Tocantins - TO"
+];
+
 let trips = [], drivers = [], vehicles = [];
 let tripFilter = { status: "todas", q: "" };
 let driverFilter = { status: "todos", q: "" };
@@ -937,7 +964,7 @@ function activateTab(name) {
   });
   $$("[data-tab-panel]").forEach(p => p.classList.toggle("hidden", p.dataset.tabPanel !== name));
   if (name === "dashboard" && !trips.length) loadTrips();
-  if (name === "consultas") loadLookups();
+  if (name === "consultas" || name === "novo") loadLookups();
   if (name === "cadastro") mostrarEscolhaCadastro();
 }
 $("#tabs").addEventListener("click", e => {
@@ -1100,7 +1127,8 @@ function viagensFiltradas() {
     if (tripFilter.status !== "todas" && t.status_vi !== tripFilter.status) return false;
     if (!q) return true;
     return String(t.id_viagem).includes(q) || String(t.id_motorista).includes(q) || String(t.id_veiculo).includes(q)
-      || (t.origem || "").toLowerCase().includes(q) || (t.destino || "").toLowerCase().includes(q);
+      || (t.origem || "").toLowerCase().includes(q) || (t.destino || "").toLowerCase().includes(q)
+      || (t.nome_motorista || "").toLowerCase().includes(q) || (t.modelo_veiculo || "").toLowerCase().includes(q);
   });
 }
 
@@ -1118,8 +1146,8 @@ function renderTrips() {
     return `
     <tr class="row-enter border-b border-base-700/40 last:border-0 hover:bg-base-800/60 transition-colors" style="animation-delay:${i * 40}ms">
       <td class="px-5 py-3.5 font-medium text-white">#${t.id_viagem}</td>
-      <td class="px-5 py-3.5 text-slate-300">#${t.id_motorista}</td>
-      <td class="px-5 py-3.5 text-slate-300">#${t.id_veiculo}</td>
+      <td class="px-5 py-3.5 text-slate-300">${esc(t.nome_motorista || "Motorista #" + t.id_motorista)}</td>
+      <td class="px-5 py-3.5 text-slate-300">${esc(t.modelo_veiculo || "Veículo #" + t.id_veiculo)}</td>
       <td class="px-5 py-3.5 text-slate-300"><span class="text-white">${esc(t.origem)}</span> <span class="text-slate-500">→</span> ${esc(t.destino)}</td>
       <td class="px-5 py-3.5 text-slate-300 tabular-nums">${fmtKg(t.peso_carga_kg)}</td>
       <td class="px-5 py-3.5 text-slate-400 text-xs tabular-nums">${fmtDate(t.data_hora_saida)}</td>
@@ -1245,6 +1273,42 @@ $("#refreshTrips").addEventListener("click", () => {
 function showBanner(msg) { const b = $("#formBanner"); b.textContent = msg; b.classList.remove("hidden"); }
 function hideBanner() { $("#formBanner").classList.add("hidden"); }
 
+function normalizarBuscaEstado(valor) {
+  return valor.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+}
+
+function configurarAutocompleteEstado(inputId, optionsId) {
+  const input = $(inputId);
+  const box = $(optionsId);
+  if (!input || !box) return;
+
+  const render = () => {
+    const q = normalizarBuscaEstado(input.value);
+    const lista = q
+      ? ESTADOS_BRASILEIROS.filter(estado => normalizarBuscaEstado(estado).startsWith(q))
+      : ESTADOS_BRASILEIROS;
+
+    box.innerHTML = lista.length
+      ? lista.map(estado => `<button type="button" data-estado="${esc(estado)}" class="block w-full text-left px-3 py-2 text-sm text-slate-200 hover:bg-base-700 transition-colors">${esc(estado)}</button>`).join("")
+      : `<div class="px-3 py-2 text-sm text-slate-500">Nenhum estado encontrado.</div>`;
+    box.classList.remove("hidden");
+  };
+
+  input.addEventListener("focus", render);
+  input.addEventListener("input", render);
+  box.addEventListener("mousedown", e => {
+    const opcao = e.target.closest("[data-estado]");
+    if (!opcao) return;
+    e.preventDefault();
+    input.value = opcao.dataset.estado;
+    box.classList.add("hidden");
+  });
+  input.addEventListener("blur", () => setTimeout(() => box.classList.add("hidden"), 120));
+}
+
+configurarAutocompleteEstado("#origem", "#origemOptions");
+configurarAutocompleteEstado("#destino", "#destinoOptions");
+
 $("#tripForm").addEventListener("submit", async e => {
   e.preventDefault();
   hideBanner();
@@ -1259,6 +1323,14 @@ $("#tripForm").addEventListener("submit", async e => {
 
   if (!idMotorista || !idVeiculo || !origem || !destino || !peso || !saida) {
     $("#formFieldErr").textContent = "Preencha motorista, veículo, origem, destino, peso da carga e data de saída.";
+    return;
+  }
+  if (!ESTADOS_BRASILEIROS.includes(origem) || !ESTADOS_BRASILEIROS.includes(destino)) {
+    $("#formFieldErr").textContent = "Selecione origem e destino usando a lista de estados.";
+    return;
+  }
+  if (origem === destino) {
+    $("#formFieldErr").textContent = "A origem e o destino não podem ser os mesmos.";
     return;
   }
 
@@ -1346,9 +1418,10 @@ $("#vehicleForm").addEventListener("submit", async e => {
   const modelo = $("#v_modelo").value.trim();
   const categoria_requerida = $("#v_categoria_requerida").value;
   const capacidade = $("#v_capacidade").value;
+  const ano = $("#v_ano").value;
 
-  if (!placa || !modelo || !capacidade) {
-    $("#vehicleFieldErr").textContent = "Preencha placa, modelo e capacidade de carga.";
+  if (!placa || !modelo || !capacidade || !ano) {
+    $("#vehicleFieldErr").textContent = "Preencha placa, modelo, ano e capacidade de carga.";
     return;
   }
   if (!PLACA_REGEX.test(placa)) {
@@ -1360,7 +1433,7 @@ $("#vehicleForm").addEventListener("submit", async e => {
     return;
   }
 
-  const payload = { placa, modelo, categoria_requerida, capacidade_carga_kg: Number(capacidade) };
+  const payload = { placa, modelo, categoria_requerida, capacidade_carga_kg: Number(capacidade), ano: Number(ano) };
 
   const btn = $("#vehicleSubmitBtn");
   btn.disabled = true;
@@ -1392,11 +1465,33 @@ async function loadLookups() {
 
   const [driversRes, vehiclesRes] = await Promise.allSettled([api("/drivers"), api("/vehicles")]);
 
-  if (driversRes.status === "fulfilled") { drivers = driversRes.value; renderDrivers(); }
+  if (driversRes.status === "fulfilled") { drivers = driversRes.value; renderDrivers(); renderTripDriverOptions(); }
   else $("#driversBody").innerHTML = `<tr><td colspan="7" class="px-5 py-8 text-center text-slate-400 text-sm">${driversRes.reason.message}</td></tr>`;
 
-  if (vehiclesRes.status === "fulfilled") { vehicles = vehiclesRes.value; renderVehicles(); }
+  if (vehiclesRes.status === "fulfilled") { vehicles = vehiclesRes.value; renderVehicles(); renderTripVehicleOptions(); }
   else $("#vehiclesBody").innerHTML = `<tr><td colspan="7" class="px-5 py-8 text-center text-slate-400 text-sm">${vehiclesRes.reason.message}</td></tr>`;
+}
+
+function renderTripDriverOptions() {
+  const select = $("#id_motorista");
+  if (!select) return;
+  const atual = select.value;
+  const disponiveis = drivers.filter(d => (d.status_m || "ativo") === "ativo");
+  select.innerHTML = `<option value="">Selecione um motorista</option>` + disponiveis.map(d =>
+    `<option value="${d.id_motorista}">#${d.id_motorista} — ${esc(d.nome || "Sem nome")}</option>`
+  ).join("");
+  if ([...select.options].some(o => o.value === atual)) select.value = atual;
+}
+
+function renderTripVehicleOptions() {
+  const select = $("#id_veiculo");
+  if (!select) return;
+  const atual = select.value;
+  const disponiveis = vehicles.filter(v => (v.status_ve || v.status_v || "disponivel") === "disponivel");
+  select.innerHTML = `<option value="">Selecione um veículo</option>` + disponiveis.map(v =>
+    `<option value="${v.id_veiculo}">#${v.id_veiculo} — ${esc(v.modelo || "Sem modelo")} — ${v.ano ?? "ano não informado"}</option>`
+  ).join("");
+  if ([...select.options].some(o => o.value === atual)) select.value = atual;
 }
 
 function renderDrivers() {
@@ -1618,6 +1713,7 @@ $("#vehiclesBody").addEventListener("click", e => {
   $("#ev_modelo").value = v.modelo || "";
   $("#ev_categoria_requerida").value = v.categoria_requerida || "D";
   $("#ev_capacidade").value = v.capacidade_carga_kg ?? "";
+  $("#ev_ano").value = v.ano ?? "";
   $("#editVehicleBanner").classList.add("hidden");
   $("#dlgEditVehicle").showModal();
 });
@@ -1630,9 +1726,10 @@ $("#editVehicleForm").addEventListener("submit", async e => {
     modelo: $("#ev_modelo").value.trim(),
     categoria_requerida: $("#ev_categoria_requerida").value,
     capacidade_carga_kg: Number($("#ev_capacidade").value || 0),
+    ano: Number($("#ev_ano").value || 0),
   };
-  if (!payload.placa || !payload.modelo) {
-    showFormBanner("#editVehicleBanner", "Preencha placa e modelo.");
+  if (!payload.placa || !payload.modelo || !payload.ano) {
+    showFormBanner("#editVehicleBanner", "Preencha placa, modelo e ano.");
     return;
   }
   if (!PLACA_REGEX.test(payload.placa)) {
