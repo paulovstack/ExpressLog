@@ -116,3 +116,23 @@ def deletar_viagem_banco(id_viagem):
         return False
     finally:
         conexao.close()
+
+def motorista_em_viagem(id_motorista: int):
+    conexao = obter_conexao()
+    try:
+        sql = """SELECT * FROM Viagem WHERE id_motorista = %s AND status = "em_andamento" """
+        with conexao.cursor() as cursor:
+            cursor.execute(sql, (id_motorista,))
+            resultado = cursor.fetchone()
+            if resultado:
+              return True
+            else:
+                return False
+
+    except Exception as e:
+        print(f"Motorista em viagem e não pode alterar: {e}")
+              return False
+    finally:
+        conexao.close()
+       
+               
