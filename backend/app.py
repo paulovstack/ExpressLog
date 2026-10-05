@@ -36,6 +36,7 @@ class MotoristaSchema(BaseModel):
     cnh: str
     categoria_cnh: str
     pontos_cnh: int = Field(0, ge=0, description="Pontos da CNH do motorista")
+    
 
     @field_validator("cnh")
     @classmethod
@@ -51,6 +52,7 @@ class VeiculoSchema(BaseModel):
     placa: str 
     categoria_requerida: Optional[str] = None
     capacidade_carga_kg: Optional[float] = Field(None, gt=0, description="Capacidade de carga em kg")
+    ano: int
     @field_validator("placa")
    
     @classmethod
@@ -61,6 +63,15 @@ class VeiculoSchema(BaseModel):
         if not re.match(r"^[A-Z]{3}-\d{4}$", v):
             raise ValueError("Placa inválida! Use o padrão tradicional brasileiro: ABC-1234.")
         return v
+
+    @field_validator("ano")
+    @classmethod
+    def validar_ano(cls, ano: int) -> int:
+        
+        if ano < 2010 or ano > 2027:
+            raise ValueError ("O ano do veículo deve estar entre 2010 e 2027.")
+        
+        return ano
 
 
 @app.get("/trips")
@@ -207,7 +218,7 @@ def obter_veiculo(id_veiculo: int):
 
 @app.post("/vehicles/cadastrar", status_code=status.HTTP_201_CREATED)
 def cadastrar_veiculo(dados: VeiculoSchema):
-    sucesso = inserir_veiculo(modelo=dados.modelo, placa=dados.placa, categoria_requerida=dados.categoria_requerida, capacidade_carga_kg=dados.capacidade_carga_kg)
+    sucesso = inserir_veiculo(modelo=dados.modelo, placa=dados.placa, categoria_requerida=dados.categoria_requerida, capacidade_carga_kg=dados.capacidade_carga_kg, ano=dados.ano)
     
     if not sucesso:
         raise HTTPException(status_code=500, detail="Erro ao cadastrar veículo no banco de dados.")
@@ -216,7 +227,7 @@ def cadastrar_veiculo(dados: VeiculoSchema):
 
 @app.patch("/vehicles/alterar/{id_veiculo}")
 def atualizar_veiculo(id_veiculo: int, dados: VeiculoSchema):
-    sucesso = atualizar_veiculo_banco(id_veiculo, modelo=dados.modelo, placa=dados.placa, categoria_requerida=dados.categoria_requerida, capacidade_carga_kg=dados.capacidade_carga_kg)
+    sucesso = atualizar_veiculo_banco(id_veiculo, modelo=dados.modelo, placa=dados.placa, categoria_requerida=dados.categoria_requerida, capacidade_carga_kg=dados.capacidade_carga_kg, ano=dados.ano)
     
     if not sucesso:
         raise HTTPException(status_code=500, detail="Erro ao atualizar veículo ou ID não encontrado.")
