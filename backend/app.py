@@ -61,9 +61,9 @@ class ViagemSchema(BaseModel):
         if estado not in estados_brasileiros:
             raise ValueError("Estado inválido")
         return estado
-
-   @model_validator(mode="after")
-   def verificar_destino(self):
+    
+    @model_validator(mode="after")
+    def verificar_destino(self):
        if self.origem == self.destino:
            raise ValueError("A origem e o destino não podem ser os mesmos.")
        return self
