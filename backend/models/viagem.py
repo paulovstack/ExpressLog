@@ -91,6 +91,20 @@ def listar_todas_viagens():
 def atualizar_viagem_concluida(id_viagem, novo_status, nova_data_chegada):
     conexao = obter_conexao()
     try:
+        viagem = buscar_viagem_por_id(id_viagem)
+        if not viagem:
+            return False
+        id_motorista = viagem["id_motorista"]
+        novo_status_m = None
+
+        if novo_status == "em_andamento":
+            novo_status_m = "em_rota"
+        
+        elif novo_status in ["concluida", "cancelada"]:
+            novo_status_m = "disponivel"
+        
+        if novo_status_m is not None:
+            sucesso = atualizar_status_motorista_banco(id_motorista, novo_status_m)
         # A query agora atualiza as duas colunas ao mesmo tempo
         sql = "UPDATE Viagem SET status_vi = %s, data_hora_chegada = %s WHERE id_viagem = %s"
         with conexao.cursor() as cursor:
