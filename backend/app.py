@@ -231,7 +231,7 @@ def rota_atualizar_motorista(id_motorista: int, dados: MotoristaSchema):
 
 @app.patch("/drivers/{id_motorista}/status")
 def rota_atualizar_status_motorista(id_motorista: int, novo_status_m: str = Body(embed=True)):
-    status_permitidos = ['ativo', 'inativo']
+    status_permitidos = ['disponivel', 'inativo']
     if novo_status_m not in status_permitidos:
         raise HTTPException(status_code=400, detail=f"Status inválido! Escolha entre: {status_permitidos}")
 
