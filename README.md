@@ -1,206 +1,225 @@
-# ExpressLog
+# 🚚 ExpressLog
 
-Sistema de gerenciamento de transporte desenvolvido para praticar conceitos de **Back-End, APIs REST, banco de dados e integração com Front-End**.
+Sistema de gerenciamento de **motoristas, veículos e viagens**, desenvolvido como projeto de estudo e portfólio durante minha formação em **Análise e Desenvolvimento de Sistemas** e **Back-End**.
 
-O ExpressLog permite cadastrar motoristas e veículos, criar viagens e acompanhar as operações da frota por meio de um painel.
+O objetivo do ExpressLog é simular situações reais de uma transportadora, aplicando regras de negócio no Back-End e integrando **Front-End, API REST e banco de dados**.
 
-## Sobre o projeto
+<p align="center">
+  <a href="https://paulovstack.github.io/ExpressLog/">🎮 ACESSAR SISTEMA</a>
+  &nbsp;&nbsp;•&nbsp;&nbsp;
+  <a href="https://github.com/paulovstack/ExpressLog">💻 VER CÓDIGO</a>
+  &nbsp;&nbsp;•&nbsp;&nbsp;
+  <a href="https://expresslog-pwur.onrender.com/docs">📖 SWAGGER</a>
+</p>
 
-O projeto surgiu durante meus estudos de **Análise e Desenvolvimento de Sistemas** e da minha formação em **Back-End**.
+---
 
-A ideia é desenvolver uma aplicação completa e, ao mesmo tempo, colocar em prática assuntos que venho estudando, como:
+## 🟢 MISSÃO PRINCIPAL — ExpressLog
 
-- Python e Programação Orientada a Objetos
-- FastAPI
-- APIs REST
-- MySQL
-- Regras de negócio
-- Validação de dados
-- Integração entre Front-End, API e banco de dados
-- Git e GitHub
-- Deploy de aplicações
+Criar um sistema de logística capaz de organizar a operação de uma frota e aplicar regras antes de permitir um agendamento.
 
-O projeto continua em desenvolvimento e novas funcionalidades serão adicionadas conforme avanço nos estudos.
+Atualmente o sistema permite:
 
-## Tecnologias utilizadas
+- 👨‍✈️ Cadastrar, editar, consultar e excluir motoristas
+- 🚛 Cadastrar, editar, consultar e excluir veículos
+- 🗓️ Criar e acompanhar viagens
+- ▶️ Iniciar rotas
+- ✅ Concluir viagens
+- ❌ Cancelar viagens
+- 🔎 Pesquisar e filtrar informações no painel
+- 📊 Acompanhar informações da operação pelo dashboard
 
-### Back-End
-- Python
-- FastAPI
-- Pydantic
-- PyMySQL
+---
 
-### Banco de dados
-- MySQL
-- Aiven
+## 🆕 ATUALIZAÇÕES RECENTES
 
-### Front-End
-- HTML
-- CSS / Tailwind CSS
-- JavaScript
+O ExpressLog recebeu novas melhorias no Back-End e no Front-End:
 
-### Deploy
-- Render — API
-- GitHub Pages — Front-End
+### 🚛 Ano do veículo
 
-## Funcionalidades
+Agora cada veículo possui também o campo **ano**.
 
-### Motoristas
-- Cadastro de motoristas
-- Consulta dos motoristas cadastrados
-- Edição dos dados
-- Alteração de status
-- Controle de pontos da CNH
-- Validação da categoria da CNH
-- Exclusão de registros
+O ano é enviado para a API, validado pelo Back-End e armazenado no banco de dados.
 
-### Veículos
-- Cadastro de veículos
-- Consulta da frota
-- Edição dos dados
-- Controle de capacidade de carga
-- Categoria de CNH exigida
-- Controle de status do veículo
-- Cadastro do ano do veículo
-- Exclusão de registros
+### 👨‍✈️ Motorista identificado pelo nome
 
-### Viagens
-- Criação de novos agendamentos
-- Associação entre motorista e veículo
-- Definição de origem e destino
-- Controle do peso da carga
-- Data e horário de saída
-- Início, conclusão e cancelamento de viagens
-- Controle automático do status do veículo
-- Validação de conflitos de motorista e veículo
+No novo agendamento não é mais necessário trabalhar apenas visualmente com o ID.
 
-## Novas atualizações
+O sistema apresenta:
 
-Nesta versão, o ExpressLog recebeu melhorias principalmente no cadastro de veículos, no agendamento e no painel de viagens.
+`ID — Nome do motorista`
 
-### Ano do veículo
+O ID continua sendo utilizado internamente pela API e pelo banco de dados.
 
-Agora cada veículo possui também o campo **ano**. O dado é salvo no banco e utilizado durante a seleção do veículo no agendamento.
+### 🚚 Veículo com modelo e ano
 
-### Motorista identificado pelo nome
+Na seleção de veículos para uma viagem, o sistema apresenta:
 
-No novo agendamento, não é mais necessário trabalhar apenas olhando o ID do motorista. A seleção apresenta o **ID junto com o nome**, facilitando a identificação.
+`ID — Modelo — Ano`
 
-Exemplo:
+Isso facilita a identificação do veículo antes de criar o agendamento.
 
-```text
-#4 — Marino Junior
-```
+### 🗺️ Origem e destino com estados brasileiros
 
-### Veículo identificado pelo modelo e ano
+Os campos de **Origem** e **Destino** agora possuem busca pelos estados brasileiros.
 
-A seleção do veículo apresenta informações mais fáceis de reconhecer:
+Ao começar a digitar, o sistema filtra os estados correspondentes.
 
-```text
-#4 — Mercedes Actros — 2024
-```
+Exemplo ao digitar `R`:
 
-O ID continua sendo utilizado internamente pela API para relacionar os registros.
+- Rio de Janeiro - RJ
+- Rio Grande do Norte - RN
+- Rio Grande do Sul - RS
+- Rondônia - RO
+- Roraima - RR
 
-### Origem e destino por estados brasileiros
+O usuário precisa selecionar um estado válido.
 
-Os campos de origem e destino agora trabalham com os estados brasileiros no formato:
+Além da validação no Front-End, a API também verifica os valores recebidos.
 
-```text
-Rio de Janeiro - RJ
-São Paulo - SP
-Minas Gerais - MG
-```
+Também não é permitido cadastrar uma viagem com **origem e destino iguais**.
 
-Ao começar a digitar, o sistema filtra os estados correspondentes. Por exemplo, ao digitar `R`, são apresentadas opções como Rio de Janeiro, Rio Grande do Norte, Rio Grande do Sul, Rondônia e Roraima.
+### 📊 Dashboard mais fácil de entender
 
-O usuário precisa selecionar um estado válido e o Back-End também faz a validação dos dados recebidos.
+O painel de viagens agora utiliza informações mais amigáveis:
 
-O sistema ainda impede que **origem e destino sejam iguais**.
+- Nome do motorista
+- Modelo do veículo
+- Origem e destino
+- Peso da carga
+- Data de saída e chegada
+- Status da viagem
 
-### Painel de viagens mais fácil de entender
+O sistema continua utilizando os IDs internamente para manter os relacionamentos no banco de dados.
 
-O painel passou a apresentar o **nome do motorista** e o **modelo do veículo**, em vez de mostrar somente os respectivos IDs.
+### 🔎 Busca aprimorada
 
-Isso foi feito no Back-End utilizando relacionamento entre as tabelas para retornar informações mais completas sobre cada viagem.
+A busca do painel também pode localizar viagens através de:
 
-### Busca aprimorada
-
-A pesquisa do painel pode localizar viagens utilizando informações como:
-
-- ID da viagem
-- Origem
-- Destino
+- ID
+- Rota
 - Nome do motorista
 - Modelo do veículo
 
-## Algumas regras de negócio
+---
 
-O ExpressLog possui validações para evitar operações incorretas. Entre elas:
+## ⚙️ REGRAS DE NEGÓCIO
 
-- O motorista precisa possuir categoria de CNH compatível com o veículo.
-- Motoristas inativos ou que não atendam às regras de pontuação não podem ser utilizados normalmente em viagens.
-- O peso da carga não pode ultrapassar a capacidade cadastrada do veículo.
-- Um motorista não pode ser utilizado em viagens conflitantes no mesmo horário.
-- Um veículo não pode ser utilizado em viagens conflitantes no mesmo horário.
-- Origem e destino precisam ser estados brasileiros válidos.
-- Origem e destino não podem ser iguais.
-- Veículos envolvidos em uma viagem têm seu status controlado pelo sistema.
+O ExpressLog possui regras para evitar operações inválidas.
 
-## Estrutura geral
+Entre elas:
 
-De forma simplificada, o sistema funciona assim:
+- 🚫 Um motorista não pode ser utilizado em viagens conflitantes
+- 🚫 Um veículo não pode ser utilizado em viagens conflitantes
+- ⚖️ A carga não pode ultrapassar a capacidade do veículo
+- 🪪 A categoria da CNH precisa ser compatível com o veículo
+- 👨‍✈️ Motoristas inativos ou com pontuação acima da regra definida não podem ser alocados
+- 🕒 Não é permitido criar um agendamento no passado
+- 🗺️ Origem e destino precisam ser estados válidos
+- 🔁 Origem e destino não podem ser iguais
+- 🚛 O status do veículo é atualizado conforme a situação da viagem
+
+---
+
+## 🎒 INVENTÁRIO
+
+### Back-End
+
+![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)
+
+### Banco de Dados
+
+![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
+
+### Front-End
+
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)
+
+### Ferramentas
+
+![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)
+![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)
+
+---
+
+## 🗺️ MAPA DO SISTEMA
 
 ```text
 Usuário
-   ↓
-Front-End
-   ↓
-API FastAPI
-   ↓
-Regras de negócio
-   ↓
-MySQL
-```
-
-O Front-End envia as informações para a API. A API valida os dados e as regras de negócio antes de realizar as operações no banco de dados.
-
-## Banco de dados
-
-O projeto trabalha principalmente com três entidades:
-
-```text
-Motorista
    │
-   └──── Viagem ──── Veículo
+   ▼
+Front-End
+GitHub Pages
+   │
+   │ HTTP / JSON
+   ▼
+API REST
+FastAPI + Python
+Render
+   │
+   ▼
+Banco de Dados
+MySQL
+Aiven
 ```
 
-A tabela de viagens relaciona um motorista e um veículo, permitindo manter o histórico das operações.
+A API funciona como intermediária entre a interface e o banco de dados.
 
-## Executando o projeto
+As regras de negócio ficam no Back-End, evitando depender apenas das validações feitas no navegador.
 
-Para executar o Back-End localmente, instale as dependências do projeto e configure as variáveis de ambiente utilizadas na conexão com o banco de dados.
+---
 
-Depois, execute a aplicação FastAPI com Uvicorn.
+## 🧠 O QUE ESTOU APRENDENDO COM O PROJETO
 
-Exemplo:
+O ExpressLog também representa minha evolução como desenvolvedor.
 
-```bash
-uvicorn app:app --reload
-```
+Durante o desenvolvimento estou praticando:
 
-A documentação interativa da API ficará disponível pelo Swagger da aplicação.
+- Programação Orientada a Objetos
+- APIs REST
+- FastAPI
+- Validação de dados
+- Pydantic
+- SQL
+- MySQL
+- Relacionamentos e Foreign Keys
+- JOIN entre tabelas
+- Regras de negócio
+- Integração Front-End e Back-End
+- Git e GitHub
+- Deploy de aplicações
+- Debug através de logs e códigos HTTP
 
-## Objetivo
+Erros encontrados durante o desenvolvimento também fazem parte do projeto, porque me ajudam a entender melhor como cada parte do sistema funciona.
 
-O ExpressLog é um projeto de estudo e portfólio. Meu objetivo é continuar evoluindo o sistema enquanto desenvolvo meus conhecimentos em **Back-End**, principalmente com Python, APIs REST, banco de dados e regras de negócio.
+---
 
-Além de implementar novas funcionalidades, procuro entender os erros encontrados durante o desenvolvimento e o motivo de cada solução aplicada.
+## 🌐 PROJETO ONLINE
 
-## Autor
+### 🎮 Sistema
 
-**Paulo Victor Carneiro Tavares**  
-Desenvolvedor Back-End em formação
+https://paulovstack.github.io/ExpressLog/
 
-GitHub: paulovstack  
-LinkedIn: paulovtavares
+### 💻 Repositório
+
+https://github.com/paulovstack/ExpressLog
+
+### 📖 Documentação da API
+
+https://expresslog-pwur.onrender.com/docs
+
+> O Back-End utiliza uma instância gratuita no Render. Por isso, o primeiro acesso pode levar alguns segundos enquanto o serviço é iniciado.
+
+---
+
+## 👨‍💻 Desenvolvedor
+
+**Paulo Victor**
+
+Desenvolvedor Back-End em formação  
+Análise e Desenvolvimento de Sistemas
+
+Este projeto faz parte do meu portfólio e continuará recebendo melhorias conforme avanço nos estudos e adquiro novos conhecimentos.
