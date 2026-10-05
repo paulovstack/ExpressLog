@@ -461,6 +461,18 @@
     <div id="formBanner" class="hidden mb-5 rounded-lg border border-red-500/30 bg-red-500/10 text-red-300 text-sm px-4 py-3"></div>
 
     <form id="tripForm" class="bg-base-850 border border-base-700/60 rounded-xl shadow-card p-6 space-y-4" novalidate>
+      <div>
+        <label class="text-xs text-slate-400 block mb-1.5" for="categoriaAgendamento">Filtrar por categoria</label>
+        <select id="categoriaAgendamento" class="w-full bg-base-800 border border-base-600 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-route-500 focus:border-route-500">
+          <option value="todas">Todas as categorias</option>
+          <option value="B">Categoria B</option>
+          <option value="C">Categoria C</option>
+          <option value="D">Categoria D</option>
+          <option value="E">Categoria E</option>
+        </select>
+        <p class="text-xs text-slate-500 mt-1.5">Ao escolher uma categoria, os veículos são filtrados pela categoria exigida e aparecem apenas motoristas com CNH compatível.</p>
+      </div>
+
       <div class="grid grid-cols-2 gap-4">
         <div>
           <label class="text-xs text-slate-400 block mb-1.5" for="motoristaBusca">Motorista</label>
@@ -746,7 +758,7 @@
             <div class="bg-base-800 border border-base-700/60 rounded-lg p-4">
               <p class="text-xs text-route-400 font-semibold uppercase tracking-wide">3. Agende</p>
               <p class="text-sm text-white font-medium mt-2">Crie uma nova viagem</p>
-              <p class="text-xs text-slate-400 mt-1">Pesquise o motorista pelo nome e o veículo pelo modelo, selecione origem e destino na lista de estados e informe peso da carga e data de saída.</p>
+              <p class="text-xs text-slate-400 mt-1">Se quiser, filtre primeiro pela categoria. Depois pesquise o motorista pelo nome e o veículo pelo modelo, selecione origem e destino na lista de estados e informe peso da carga e data de saída.</p>
             </div>
             <div class="bg-base-800 border border-base-700/60 rounded-lg p-4">
               <p class="text-xs text-route-400 font-semibold uppercase tracking-wide">4. Acompanhe</p>
@@ -1649,9 +1661,26 @@ function mostrarInfoVeiculo(item) {
   box.classList.remove("hidden");
 }
 
+const ORDEM_CATEGORIAS = { B: 1, C: 2, D: 3, E: 4 };
+
+function categoriaAgendamentoAtual() {
+  return $("#categoriaAgendamento")?.value || "todas";
+}
+
+function motoristaCompativelComFiltro(d) {
+  const filtro = categoriaAgendamentoAtual();
+  if (filtro === "todas") return true;
+  return (ORDEM_CATEGORIAS[d.categoria_cnh] || 0) >= (ORDEM_CATEGORIAS[filtro] || 0);
+}
+
+function veiculoCompativelComFiltro(v) {
+  const filtro = categoriaAgendamentoAtual();
+  return filtro === "todas" || v.categoria_requerida === filtro;
+}
+
 function renderTripDriverOptions() {
   configurarAutocompleteRecurso("#motoristaBusca", "#id_motorista", "#motoristaOptions",
-    () => drivers.filter(d => (d.status_m || "ativo") === "ativo").map(d => ({ id: d.id_motorista, label: `(ID: ${d.id_motorista}) ${d.nome || "Sem nome"}` })),
+    () => drivers.filter(d => (d.status_m || "ativo") === "ativo" && motoristaCompativelComFiltro(d)).map(d => ({ id: d.id_motorista, label: `(ID: ${d.id_motorista}) ${d.nome || "Sem nome"}` })),
     item => item.label,
     mostrarInfoMotorista,
     () => limparInfoAgendamento("#motoristaInfo")
@@ -1660,12 +1689,21 @@ function renderTripDriverOptions() {
 
 function renderTripVehicleOptions() {
   configurarAutocompleteRecurso("#veiculoBusca", "#id_veiculo", "#veiculoOptions",
-    () => vehicles.filter(v => (v.status_ve || v.status_v || "disponivel") === "disponivel").map(v => ({ id: v.id_veiculo, label: `(ID: ${v.id_veiculo}) ${v.modelo || "Sem modelo"}` })),
+    () => vehicles.filter(v => (v.status_ve || v.status_v || "disponivel") === "disponivel" && veiculoCompativelComFiltro(v)).map(v => ({ id: v.id_veiculo, label: `(ID: ${v.id_veiculo}) ${v.modelo || "Sem modelo"}` })),
     item => item.label,
     mostrarInfoVeiculo,
     () => limparInfoAgendamento("#veiculoInfo")
   );
 }
+
+$("#categoriaAgendamento").addEventListener("change", () => {
+  $("#motoristaBusca").value = "";
+  $("#id_motorista").value = "";
+  $("#veiculoBusca").value = "";
+  $("#id_veiculo").value = "";
+  limparInfoAgendamento("#motoristaInfo");
+  limparInfoAgendamento("#veiculoInfo");
+});
 
 function renderDrivers() {
   const q = driverFilter.q;
