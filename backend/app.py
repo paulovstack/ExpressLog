@@ -236,7 +236,7 @@ def rota_atualizar_status_motorista(id_motorista: int, novo_status_m: str = Body
         raise HTTPException(status_code=400, detail=f"Status inválido! Escolha entre: {status_permitidos}")
 
 
-    if novo_status_m == "inativo:
+    if novo_status_m == "inativo":
        if motorista_em_viagem(id_motorista)
           raise HTTPException(status_code=409, detail="Não é possível inativar o motorista enquanto ele estiver em rota.")
        
