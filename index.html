@@ -463,16 +463,20 @@
     <form id="tripForm" class="bg-base-850 border border-base-700/60 rounded-xl shadow-card p-6 space-y-4" novalidate>
       <div class="grid grid-cols-2 gap-4">
         <div>
-          <label class="text-xs text-slate-400 block mb-1.5" for="id_motorista">Motorista</label>
-          <select id="id_motorista" required class="w-full bg-base-800 border border-base-600 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-route-500 focus:border-route-500">
-            <option value="">Selecione um motorista</option>
-          </select>
+          <label class="text-xs text-slate-400 block mb-1.5" for="motoristaBusca">Motorista</label>
+          <div class="relative">
+            <input id="motoristaBusca" type="text" required autocomplete="off" class="w-full bg-base-800 border border-base-600 rounded-lg px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-route-500 focus:border-route-500" placeholder="Digite o nome do motorista">
+            <input id="id_motorista" type="hidden">
+            <div id="motoristaOptions" class="hidden absolute z-30 mt-1 w-full max-h-52 overflow-y-auto bg-base-800 border border-base-600 rounded-lg shadow-card"></div>
+          </div>
         </div>
         <div>
-          <label class="text-xs text-slate-400 block mb-1.5" for="id_veiculo">Veículo</label>
-          <select id="id_veiculo" required class="w-full bg-base-800 border border-base-600 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-route-500 focus:border-route-500">
-            <option value="">Selecione um veículo</option>
-          </select>
+          <label class="text-xs text-slate-400 block mb-1.5" for="veiculoBusca">Veículo</label>
+          <div class="relative">
+            <input id="veiculoBusca" type="text" required autocomplete="off" class="w-full bg-base-800 border border-base-600 rounded-lg px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-route-500 focus:border-route-500" placeholder="Digite o modelo do veículo">
+            <input id="id_veiculo" type="hidden">
+            <div id="veiculoOptions" class="hidden absolute z-30 mt-1 w-full max-h-52 overflow-y-auto bg-base-800 border border-base-600 rounded-lg shadow-card"></div>
+          </div>
         </div>
       </div>
 
@@ -735,12 +739,12 @@
             <div class="bg-base-800 border border-base-700/60 rounded-lg p-4">
               <p class="text-xs text-route-400 font-semibold uppercase tracking-wide">2. Consulte</p>
               <p class="text-sm text-white font-medium mt-2">Confira os dados cadastrados</p>
-              <p class="text-xs text-slate-400 mt-1">Na aba Motoristas &amp; veículos você pode consultar IDs, categorias, capacidade, pontos e status.</p>
+              <p class="text-xs text-slate-400 mt-1">Na aba Motoristas &amp; veículos você pode consultar IDs, categorias, capacidade, ano dos veículos, pontos e status.</p>
             </div>
             <div class="bg-base-800 border border-base-700/60 rounded-lg p-4">
               <p class="text-xs text-route-400 font-semibold uppercase tracking-wide">3. Agende</p>
               <p class="text-sm text-white font-medium mt-2">Crie uma nova viagem</p>
-              <p class="text-xs text-slate-400 mt-1">Informe motorista, veículo, rota, peso da carga e a data e hora de saída.</p>
+              <p class="text-xs text-slate-400 mt-1">Pesquise o motorista pelo nome e o veículo pelo modelo, selecione origem e destino na lista de estados e informe peso da carga e data de saída.</p>
             </div>
             <div class="bg-base-800 border border-base-700/60 rounded-lg p-4">
               <p class="text-xs text-route-400 font-semibold uppercase tracking-wide">4. Acompanhe</p>
@@ -792,6 +796,13 @@
                 <p class="text-xs text-slate-400 mt-1">A data e a hora de saída precisam ser atuais ou futuras. Agendamentos com data e hora retroativas são recusados.</p>
               </div>
             </div>
+            <div class="p-5 flex gap-4">
+              <div class="w-8 h-8 rounded-lg bg-route-500/15 text-route-300 grid place-items-center shrink-0 font-display font-700 text-xs">06</div>
+              <div>
+                <p class="text-sm text-white font-medium">Motorista em rota não pode ser inativado</p>
+                <p class="text-xs text-slate-400 mt-1">Enquanto existir uma viagem em andamento para o motorista, o sistema bloqueia a alteração do status para inativo.</p>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -820,7 +831,7 @@
       <aside class="space-y-6">
         <div class="bg-route-500/10 border border-route-500/30 rounded-xl p-5">
           <h2 class="font-display text-sm font-600 text-white">Antes de agendar</h2>
-          <p class="text-xs text-slate-300 mt-2 leading-relaxed">Confira o ID do motorista e do veículo na aba <strong class="text-white">Motoristas &amp; veículos</strong>. Verifique também a categoria da CNH, os pontos e a capacidade de carga.</p>
+          <p class="text-xs text-slate-300 mt-2 leading-relaxed">No agendamento, digite o nome do motorista ou o modelo do veículo e selecione uma opção da lista. O sistema mantém os IDs internamente. Verifique também a categoria da CNH, os pontos e a capacidade de carga.</p>
         </div>
 
         <div class="bg-base-850 border border-base-700/60 rounded-xl shadow-card p-5">
@@ -828,11 +839,11 @@
           <div class="space-y-4 text-xs">
             <div>
               <p class="text-white font-medium">Motorista não encontrado</p>
-              <p class="text-slate-400 mt-1">Confira se o ID informado pertence a um motorista cadastrado.</p>
+              <p class="text-slate-400 mt-1">Digite o nome e selecione um motorista válido na lista de sugestões.</p>
             </div>
             <div>
               <p class="text-white font-medium">Veículo não encontrado</p>
-              <p class="text-slate-400 mt-1">Confira o ID do veículo antes de tentar novamente.</p>
+              <p class="text-slate-400 mt-1">Digite o modelo e selecione um veículo válido na lista de sugestões.</p>
             </div>
             <div>
               <p class="text-white font-medium">Compatibilidade inválida</p>
@@ -851,7 +862,7 @@
 
         <div class="bg-base-850 border border-base-700/60 rounded-xl shadow-card p-5">
           <h2 class="font-display text-sm font-600 text-white">Dica</h2>
-          <p class="text-xs text-slate-400 mt-2 leading-relaxed">Cadastre primeiro os motoristas e veículos. Depois consulte os respectivos IDs antes de criar um novo agendamento. Isso reduz erros no preenchimento.</p>
+          <p class="text-xs text-slate-400 mt-2 leading-relaxed">Cadastre primeiro os motoristas e veículos. No agendamento, use a busca por nome ou modelo e selecione uma sugestão. Os IDs são tratados pelo sistema automaticamente.</p>
           <button type="button" data-go-tab="novo" class="mt-4 w-full bg-route-500 hover:bg-route-400 text-white text-sm font-medium rounded-lg py-2.5 transition-colors">Criar novo agendamento</button>
         </div>
       </aside>
@@ -1434,6 +1445,8 @@ $("#tripForm").addEventListener("submit", async e => {
   try {
     await api("/trips", { method: "POST", body: JSON.stringify(payload) });
     $("#tripForm").reset();
+    $("#id_motorista").value = "";
+    $("#id_veiculo").value = "";
     toast("Viagem agendada com sucesso");
     trips = [];
     await loadLookups();
@@ -1555,26 +1568,52 @@ async function loadLookups() {
   else $("#vehiclesBody").innerHTML = `<tr><td colspan="8" class="px-5 py-8 text-center text-slate-400 text-sm">${vehiclesRes.reason.message}</td></tr>`;  renderHomeStats();
 }
 
+function normalizarBuscaRecurso(valor) {
+  return (valor || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+}
+
+function configurarAutocompleteRecurso(inputId, hiddenId, optionsId, getItens, getLabel) {
+  const input = $(inputId), hidden = $(hiddenId), box = $(optionsId);
+  if (!input || !hidden || !box || input.dataset.autocompleteReady) return;
+  input.dataset.autocompleteReady = "1";
+
+  const render = () => {
+    hidden.value = "";
+    const q = normalizarBuscaRecurso(input.value);
+    const lista = getItens().filter(item => normalizarBuscaRecurso(getLabel(item)).includes(q));
+    box.innerHTML = lista.length
+      ? lista.map(item => `<button type="button" data-recurso-id="${item.id}" class="block w-full text-left px-3 py-2 text-sm text-slate-200 hover:bg-base-700 transition-colors">${esc(item.label)}</button>`).join("")
+      : `<div class="px-3 py-2 text-sm text-slate-500">Nenhum resultado encontrado.</div>`;
+    box.classList.remove("hidden");
+  };
+
+  input.addEventListener("focus", render);
+  input.addEventListener("input", render);
+  box.addEventListener("mousedown", e => {
+    const opcao = e.target.closest("[data-recurso-id]");
+    if (!opcao) return;
+    e.preventDefault();
+    const item = getItens().find(x => String(x.id) === opcao.dataset.recursoId);
+    if (!item) return;
+    hidden.value = item.id;
+    input.value = item.label;
+    box.classList.add("hidden");
+  });
+  input.addEventListener("blur", () => setTimeout(() => box.classList.add("hidden"), 120));
+}
+
 function renderTripDriverOptions() {
-  const select = $("#id_motorista");
-  if (!select) return;
-  const atual = select.value;
-  const disponiveis = drivers.filter(d => (d.status_m || "ativo") === "ativo");
-  select.innerHTML = `<option value="">Selecione um motorista</option>` + disponiveis.map(d =>
-    `<option value="${d.id_motorista}">(ID: ${d.id_motorista}) ${esc(d.nome || "Sem nome")}</option>`
-  ).join("");
-  if ([...select.options].some(o => o.value === atual)) select.value = atual;
+  configurarAutocompleteRecurso("#motoristaBusca", "#id_motorista", "#motoristaOptions",
+    () => drivers.filter(d => (d.status_m || "ativo") === "ativo").map(d => ({ id: d.id_motorista, label: `(ID: ${d.id_motorista}) ${d.nome || "Sem nome"}` })),
+    item => item.label
+  );
 }
 
 function renderTripVehicleOptions() {
-  const select = $("#id_veiculo");
-  if (!select) return;
-  const atual = select.value;
-  const disponiveis = vehicles.filter(v => (v.status_ve || v.status_v || "disponivel") === "disponivel");
-  select.innerHTML = `<option value="">Selecione um veículo</option>` + disponiveis.map(v =>
-    `<option value="${v.id_veiculo}">(ID: ${v.id_veiculo}) ${esc(v.modelo || "Sem modelo")}</option>`
-  ).join("");
-  if ([...select.options].some(o => o.value === atual)) select.value = atual;
+  configurarAutocompleteRecurso("#veiculoBusca", "#id_veiculo", "#veiculoOptions",
+    () => vehicles.filter(v => (v.status_ve || v.status_v || "disponivel") === "disponivel").map(v => ({ id: v.id_veiculo, label: `(ID: ${v.id_veiculo}) ${v.modelo || "Sem modelo"}` })),
+    item => item.label
+  );
 }
 
 function renderDrivers() {
