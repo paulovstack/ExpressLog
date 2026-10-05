@@ -120,9 +120,9 @@ def deletar_viagem_banco(id_viagem):
 def motorista_em_viagem(id_motorista: int):
     conexao = obter_conexao()
     try:
-        sql = """SELECT * FROM Viagem WHERE id_motorista = %s AND status_vi = "em_andamento" """
+        sql = """SELECT * FROM Viagem WHERE id_motorista = %s AND status_vi = $s """
         with conexao.cursor() as cursor:
-            cursor.execute(sql, (id_motorista,))
+            cursor.execute(sql, (id_motorista, "em_andamento",))
             resultado = cursor.fetchone()
             if resultado:
               return True
