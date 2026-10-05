@@ -1,5 +1,5 @@
 from fastapi import FastAPI, HTTPException, status, Body
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, field_validator, model_validator
 from typing import Optional
 from fastapi.middleware.cors import CORSMiddleware
 import re
@@ -17,7 +17,35 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],)
 
-
+estados_brasileiros = [
+    "Acre - AC",
+    "Alagoas - AL",
+    "Amapá - AP",
+    "Amazonas - AM",
+    "Bahia - BA",
+    "Ceará - CE",
+    "Distrito Federal - DF",
+    "Espírito Santo - ES",
+    "Goiás - GO",
+    "Maranhão - MA",
+    "Mato Grosso - MT",
+    "Mato Grosso do Sul - MS",
+    "Minas Gerais - MG",
+    "Pará - PA",
+    "Paraíba - PB",
+    "Paraná - PR",
+    "Pernambuco - PE",
+    "Piauí - PI",
+    "Rio de Janeiro - RJ",
+    "Rio Grande do Norte - RN",
+    "Rio Grande do Sul - RS",
+    "Rondônia - RO",
+    "Roraima - RR",
+    "Santa Catarina - SC",
+    "São Paulo - SP",
+    "Sergipe - SE",
+    "Tocantins - TO"
+]
 class ViagemSchema(BaseModel):
     id_motorista: int
     id_veiculo: int
@@ -26,6 +54,23 @@ class ViagemSchema(BaseModel):
     destino: str = Field(..., min_length=2, description="Destino da viagem")
     data_hora_saida: str = Field(None, description="Data de saída YYYY-MM-DD")
     data_hora_chegada: str = Field(None, description="Data de chegada YYYY-MM-DD")
+
+    @field_validator("origem","destino)
+    @classmethod
+    def verificar_ori_dest (cls, estado: str) -> str:
+        if estado not in estados_brasileiros:
+            raise ValueError("Estado inválido")
+        return estado
+
+   @model_validator(mode="after")
+   def verificar_destino(self):
+       if self.origem == self.destino:
+           raise ValueError("A origem e o destino não podem ser os mesmos.")
+       return self
+        
+
+      
+        
 
 class StatusPatchSchema(BaseModel):
     status_vi: str
