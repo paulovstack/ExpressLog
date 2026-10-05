@@ -237,7 +237,7 @@ def rota_atualizar_status_motorista(id_motorista: int, novo_status_m: str = Body
 
 
     if novo_status_m == "inativo":
-       if motorista_em_viagem(id_motorista)
+       if motorista_em_viagem(id_motorista):
           raise HTTPException(status_code=409, detail="Não é possível inativar o motorista enquanto ele estiver em rota.")
        
     sucesso = atualizar_status_motorista_banco(id_motorista, novo_status_m)
