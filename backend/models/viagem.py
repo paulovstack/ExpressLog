@@ -72,7 +72,13 @@ def verificar_viagem_existente(id_veiculo, id_motorista, data_hora_saida):
 def listar_todas_viagens(): 
     conexao = obter_conexao()
     try:
-        sql = "SELECT * FROM Viagem"
+        sql = """SELECT
+            Viagem.*,
+            Motorista.nome AS nome_motorista,
+            Veiculo.modelo AS modelo_veiculo
+        FROM Viagem 
+        JOIN Motorista ON Viagem.id_motorista = Motorista.id_motorista
+        JOIN Veiculo ON Viagem.id_veiculo = Veiculo.id_veiculo"""
         with conexao.cursor() as cursor:
             cursor.execute(sql)
             return cursor.fetchall()
