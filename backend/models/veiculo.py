@@ -1,15 +1,15 @@
 from database import obter_conexao
 
-def inserir_veiculo(placa, modelo, categoria_requerida, capacidade_carga_kg):
+def inserir_veiculo(placa, modelo, categoria_requerida, capacidade_carga_kg, ano):
     conexao = obter_conexao()
     try:
         with conexao.cursor() as cursor:
           
             sql = """
-                INSERT INTO Veiculo (placa, modelo, categoria_requerida, capacidade_carga_kg, status_ve) 
-                VALUES (%s, %s, %s, %s, 'disponivel')
+                INSERT INTO Veiculo (placa, modelo, categoria_requerida, capacidade_carga_kg, status_ve, ano) 
+                VALUES (%s, %s, %s, %s, 'disponivel', %s)
             """
-            cursor.execute(sql, (placa, modelo, categoria_requerida, capacidade_carga_kg))
+            cursor.execute(sql, (placa, modelo, categoria_requerida, capacidade_carga_kg, ano))
             conexao.commit()
             return True
             
@@ -66,17 +66,17 @@ def atualizar_status_veiculo(id_veiculo, novo_status_ve):
         conexao.close()
 
 
-def atualizar_veiculo_banco(id_veiculo: int, modelo: str, placa: str, categoria_requerida: str, capacidade_carga_kg: float):
+def atualizar_veiculo_banco(id_veiculo: int, modelo: str, placa: str, categoria_requerida: str, capacidade_carga_kg: float, ano: int):
     try:
         conexao = obter_conexao()
         cursor = conexao.cursor()
         
         sql = """
             UPDATE Veiculo
-            SET modelo = %s, placa = %s, categoria_requerida = %s, capacidade_carga_kg = %s 
+            SET modelo = %s, placa = %s, categoria_requerida = %s, capacidade_carga_kg = %s, ano = %s
             WHERE id_veiculo = %s
         """
-        cursor.execute(sql, (modelo, placa, categoria_requerida, capacidade_carga_kg, id_veiculo))
+        cursor.execute(sql, (modelo, placa, categoria_requerida, capacidade_carga_kg, ano ,id_veiculo))
         
         conexao.commit()
         linhas_afetadas = cursor.rowcount
