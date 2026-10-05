@@ -55,7 +55,7 @@ class ViagemSchema(BaseModel):
     data_hora_saida: str = Field(None, description="Data de saída YYYY-MM-DD")
     data_hora_chegada: str = Field(None, description="Data de chegada YYYY-MM-DD")
 
-    @field_validator("origem","destino)
+    @field_validator("origem","destino")
     @classmethod
     def verificar_ori_dest (cls, estado: str) -> str:
         if estado not in estados_brasileiros:
