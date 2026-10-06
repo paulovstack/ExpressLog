@@ -6,7 +6,7 @@ def inserir_motorista_banco(nome: str, cnh: str, categoria_cnh: str, pontos_cnh:
         with conexao.cursor() as cursor:
             sql = """
                 INSERT INTO Motorista (nome, cnh, categoria_cnh, pontos_cnh, status_m) 
-                VALUES (%s, %s, %s, %s, 'ativo')
+                VALUES (%s, %s, %s, %s, 'disponivel')
             """
             cursor.execute(sql, (nome, cnh, categoria_cnh, pontos_cnh))
             conexao.commit()
