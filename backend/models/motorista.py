@@ -56,7 +56,7 @@ def atualizar_status_motorista_banco(id_motorista: int, novo_status_m: str, cone
     conexao_propria=False
 
     if conexao is None:
-        conexao = obter.conexao()
+        conexao = obter_conexao()
         conexao_propria=True
     
     try:
