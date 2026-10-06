@@ -54,7 +54,7 @@ def buscar_viagem_por_id(id_viagem, conexao=None):
     
     finally:
         if conexao_propria == True:
-        conexao.close()
+            conexao.close()
 
 def verificar_viagem_existente(id_veiculo, id_motorista, data_hora_saida):
     conexao = obter_conexao()
