@@ -290,6 +290,24 @@
     }
   }
 
+  /* ===== HERO NOTURNO ANIMADO ===== */
+  .night-hero{background:linear-gradient(180deg,#050914 0%,#0b1320 58%,#101824 100%)}
+  .night-stars{animation:nightTwinkle 4.5s ease-in-out infinite alternate}
+  .night-city{animation:cityGlow 5s ease-in-out infinite alternate}
+  .night-road-lines{animation:roadFlow 1.15s linear infinite}
+  .night-truck-a{animation:truckDriveA 12s linear infinite}
+  .night-truck-b{animation:truckDriveB 17s linear infinite;animation-delay:-7s}
+  .night-light{animation:headlightPulse 1.8s ease-in-out infinite alternate}
+  @keyframes nightTwinkle{from{opacity:.45}to{opacity:.9}}
+  @keyframes cityGlow{from{opacity:.55}to{opacity:.82}}
+  @keyframes roadFlow{to{stroke-dashoffset:-72}}
+  @keyframes truckDriveA{from{transform:translateX(-360px)}to{transform:translateX(1500px)}}
+  @keyframes truckDriveB{from{transform:translateX(1450px)}to{transform:translateX(-520px)}}
+  @keyframes headlightPulse{from{opacity:.35}to{opacity:.72}}
+  @media (prefers-reduced-motion: reduce){
+    .night-stars,.night-city,.night-road-lines,.night-truck-a,.night-truck-b,.night-light{animation:none!important}
+  }
+
 </style>
 </head>
 <body class="bg-base-950 text-slate-200 min-h-screen antialiased glow">
@@ -332,15 +350,38 @@
   <section data-tab-panel="inicio" class="tab-panel space-y-7">
     <div class="relative overflow-hidden rounded-2xl border border-base-700/60 bg-base-850 shadow-card min-h-[390px]">
       <div class="absolute inset-0 bg-gradient-to-r from-base-950 via-base-900/95 to-base-850/55 z-10"></div>
-      <div class="absolute inset-0 opacity-35" aria-hidden="true">
+      <div class="absolute inset-0 night-hero opacity-70" aria-hidden="true">
         <svg viewBox="0 0 1200 500" class="w-full h-full object-cover" preserveAspectRatio="xMidYMid slice">
-          <defs><linearGradient id="road" x1="0" x2="1"><stop offset="0" stop-color="#18212E"/><stop offset="1" stop-color="#2F7DF0"/></linearGradient></defs>
-          <rect width="1200" height="500" fill="#101824"/>
-          <path d="M0 390 C250 330 480 360 720 315 C920 280 1080 290 1200 260 L1200 500 L0 500Z" fill="url(#road)" opacity=".6"/>
-          <path d="M520 348 C760 305 950 306 1200 276" fill="none" stroke="#fff" stroke-opacity=".28" stroke-width="5" stroke-dasharray="34 28"/>
-          <g transform="translate(755 180) scale(1.45)" fill="none" stroke="#8CB6F8" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="0" y="45" width="155" height="85" rx="8" fill="#18212E"/><path d="M155 72h55l45 45v13H155z" fill="#243040"/>
-            <path d="M177 75v34h58"/><circle cx="48" cy="139" r="18" fill="#0F1620"/><circle cx="207" cy="139" r="18" fill="#0F1620"/>
+          <defs>
+            <linearGradient id="nightSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#020617"/><stop offset=".7" stop-color="#0b1730"/><stop offset="1" stop-color="#101827"/></linearGradient>
+            <linearGradient id="nightRoad" x1="0" x2="1"><stop offset="0" stop-color="#111827"/><stop offset=".55" stop-color="#1e293b"/><stop offset="1" stop-color="#172033"/></linearGradient>
+            <linearGradient id="headGlow" x1="0" x2="1"><stop offset="0" stop-color="#fde68a" stop-opacity=".72"/><stop offset="1" stop-color="#fde68a" stop-opacity="0"/></linearGradient>
+          </defs>
+          <rect width="1200" height="500" fill="url(#nightSky)"/>
+          <g class="night-stars" fill="#dbeafe">
+            <circle cx="650" cy="65" r="1.8"/><circle cx="735" cy="105" r="1.2"/><circle cx="850" cy="58" r="1.4"/><circle cx="1010" cy="95" r="1.7"/><circle cx="1120" cy="48" r="1.1"/><circle cx="940" cy="145" r="1.1"/><circle cx="560" cy="115" r="1.2"/>
+          </g>
+          <circle cx="1040" cy="92" r="35" fill="#dbeafe" opacity=".18"/>
+          <g class="night-city" fill="#101a2d">
+            <rect x="620" y="175" width="62" height="120"/><rect x="690" y="205" width="44" height="90"/><rect x="745" y="155" width="76" height="140"/><rect x="830" y="190" width="50" height="105"/><rect x="890" y="135" width="86" height="160"/><rect x="986" y="185" width="52" height="110"/><rect x="1048" y="160" width="66" height="135"/><rect x="1122" y="205" width="48" height="90"/>
+          </g>
+          <g fill="#fbbf24" opacity=".5"><rect x="765" y="177" width="6" height="7"/><rect x="789" y="198" width="6" height="7"/><rect x="918" y="160" width="7" height="8"/><rect x="949" y="205" width="7" height="8"/><rect x="1070" y="190" width="7" height="8"/><rect x="1092" y="225" width="7" height="8"/></g>
+          <path d="M0 350 C260 315 485 325 710 305 C900 288 1065 292 1200 270 L1200 500 L0 500Z" fill="url(#nightRoad)"/>
+          <path class="night-road-lines" d="M-40 405 C290 350 590 362 820 335 C1010 313 1125 315 1260 292" fill="none" stroke="#e2e8f0" stroke-opacity=".38" stroke-width="5" stroke-dasharray="42 30"/>
+          <path d="M0 455 C350 390 710 405 1200 340" fill="none" stroke="#2f7df0" stroke-opacity=".22" stroke-width="3"/>
+          <g class="night-truck-a" transform="translate(0 265) scale(.78)">
+            <ellipse class="night-light" cx="302" cy="105" rx="110" ry="24" fill="url(#headGlow)"/>
+            <rect x="30" y="32" width="185" height="82" rx="7" fill="#1f2b3d" stroke="#5b98f5" stroke-width="4"/>
+            <path d="M215 58h48l39 38v18h-87z" fill="#26364c" stroke="#5b98f5" stroke-width="4"/>
+            <rect x="237" y="66" width="30" height="25" rx="2" fill="#8cb6f8" opacity=".38"/>
+            <circle cx="78" cy="122" r="17" fill="#060b14" stroke="#64748b" stroke-width="4"/><circle cx="251" cy="122" r="17" fill="#060b14" stroke="#64748b" stroke-width="4"/>
+            <circle cx="299" cy="101" r="5" fill="#fde68a"/>
+          </g>
+          <g class="night-truck-b" transform="translate(0 335) scale(-.52 .52)">
+            <ellipse class="night-light" cx="302" cy="105" rx="110" ry="24" fill="url(#headGlow)"/>
+            <rect x="30" y="32" width="185" height="82" rx="7" fill="#172033" stroke="#8cb6f8" stroke-width="4"/>
+            <path d="M215 58h48l39 38v18h-87z" fill="#22304a" stroke="#8cb6f8" stroke-width="4"/>
+            <circle cx="78" cy="122" r="17" fill="#060b14"/><circle cx="251" cy="122" r="17" fill="#060b14"/><circle cx="299" cy="101" r="5" fill="#fde68a"/>
           </g>
         </svg>
       </div>
@@ -357,7 +398,7 @@
 
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
       <div class="bg-base-850 border border-base-700/60 rounded-xl p-5 shadow-card"><p class="text-xs text-slate-400 uppercase tracking-wide">Frota cadastrada</p><p id="homeVehicles" class="font-display text-3xl font-700 text-white mt-2">—</p></div>
-      <div class="bg-base-850 border border-base-700/60 rounded-xl p-5 shadow-card"><p class="text-xs text-slate-400 uppercase tracking-wide">Motoristas ativos</p><p id="homeDrivers" class="font-display text-3xl font-700 text-white mt-2">—</p></div>
+      <div class="bg-base-850 border border-base-700/60 rounded-xl p-5 shadow-card"><p class="text-xs text-slate-400 uppercase tracking-wide">Motoristas disponíveis</p><p id="homeDrivers" class="font-display text-3xl font-700 text-white mt-2">—</p></div>
       <div class="bg-base-850 border border-base-700/60 rounded-xl p-5 shadow-card"><p class="text-xs text-slate-400 uppercase tracking-wide">Em andamento</p><p id="homeInProgress" class="font-display text-3xl font-700 text-white mt-2">—</p></div>
       <div class="bg-base-850 border border-base-700/60 rounded-xl p-5 shadow-card"><p class="text-xs text-slate-400 uppercase tracking-wide">Concluídas</p><p id="homeCompleted" class="font-display text-3xl font-700 text-white mt-2">—</p></div>
     </div>
@@ -389,7 +430,7 @@
         <div class="w-9 h-9 rounded-lg bg-route-500/15 grid place-items-center text-route-400"><svg viewBox="0 0 24 24" class="w-4.5 h-4.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7z"/><circle cx="7.5" cy="18" r="1.6"/><circle cx="17.5" cy="18" r="1.6"/></svg></div>
       </div>
       <div class="bg-base-850 border border-base-700/60 rounded-xl p-5 shadow-card flex items-start justify-between">
-        <div><p class="text-xs text-slate-400 uppercase tracking-wide">Motoristas ativos</p>
+        <div><p class="text-xs text-slate-400 uppercase tracking-wide">Motoristas disponíveis</p>
         <p class="font-display text-3xl font-700 text-white mt-2 tabular-nums" data-stat="motoristas">—</p></div>
         <div class="w-9 h-9 rounded-lg bg-emerald-500/15 grid place-items-center text-emerald-400"><svg viewBox="0 0 24 24" class="w-4.5 h-4.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c1.2-3.6 4-5.5 7-5.5s5.8 1.9 7 5.5"/></svg></div>
       </div>
@@ -556,7 +597,8 @@
           </div>
           <select id="driverStatusFilter" class="bg-base-800 border border-base-600 rounded-full px-2.5 py-1.5 text-xs text-white focus:outline-none focus:ring-2 focus:ring-route-500">
             <option value="todos">Todos</option>
-            <option value="ativo">Ativos</option>
+            <option value="disponivel">Disponíveis</option>
+            <option value="em_rota">Em rota</option>
             <option value="inativo">Inativos</option>
           </select>
         </div>
@@ -676,7 +718,7 @@
               <input id="d_pontos_cnh" type="number" min="0" max="40" value="0" class="w-full bg-base-800 border border-base-600 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-route-500 focus:border-route-500">
             </div>
           </div>
-          <p class="text-xs text-slate-500">Motoristas com 20 pontos ou mais, ou status inativo, não podem ser alocados em viagens.</p>
+          <p class="text-xs text-slate-500">Somente motoristas disponíveis e com menos de 20 pontos na CNH podem ser alocados em viagens.</p>
           <p class="text-xs text-red-400 min-h-[1rem]" id="driverFieldErr"></p>
           <button type="submit" id="driverSubmitBtn" class="w-full bg-route-500 hover:bg-route-400 disabled:opacity-60 disabled:cursor-not-allowed text-white font-medium text-sm rounded-lg py-2.5 transition-colors flex items-center justify-center gap-2">
             <svg class="driver-spin hidden w-4 h-4 spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9" stroke-opacity=".25"/><path d="M21 12a9 9 0 00-9-9"/></svg>
@@ -797,7 +839,7 @@
               <div class="w-8 h-8 rounded-lg bg-red-500/15 text-red-300 grid place-items-center shrink-0 font-display font-700 text-xs">03</div>
               <div>
                 <p class="text-sm text-white font-medium">Motorista precisa estar apto</p>
-                <p class="text-xs text-slate-400 mt-1">Motoristas com status inativo ou com 20 pontos ou mais na CNH não podem ser alocados em uma viagem.</p>
+                <p class="text-xs text-slate-400 mt-1">Somente motoristas com status disponível podem ser selecionados para um novo agendamento. Motoristas inativos, em rota ou com 20 pontos ou mais na CNH não podem ser alocados.</p>
               </div>
             </div>
             <div class="p-5 flex gap-4">
@@ -818,10 +860,20 @@
               <div class="w-8 h-8 rounded-lg bg-route-500/15 text-route-300 grid place-items-center shrink-0 font-display font-700 text-xs">06</div>
               <div>
                 <p class="text-sm text-white font-medium">Motorista em rota não pode ser inativado</p>
-                <p class="text-xs text-slate-400 mt-1">Enquanto existir uma viagem em andamento para o motorista, o sistema bloqueia a alteração do status para inativo.</p>
+                <p class="text-xs text-slate-400 mt-1">Ao iniciar uma viagem, o motorista passa automaticamente para “Em rota”. Enquanto estiver em rota, o status não pode ser alterado manualmente. Ao concluir ou cancelar a viagem, ele retorna automaticamente para “Disponível”.</p>
               </div>
             </div>
           </div>
+        </div>
+
+        <div class="bg-base-850 border border-base-700/60 rounded-xl shadow-card p-6">
+          <h2 class="font-display text-base font-600 text-white mb-4">Status dos motoristas</h2>
+          <div class="space-y-3 text-xs">
+            <div class="flex gap-3 items-start"><span class="rounded-full px-2.5 py-1 border bg-emerald-500/15 text-emerald-300 border-emerald-500/30 shrink-0">Disponível</span><p class="text-slate-400 pt-1">Pode ser selecionado para um novo agendamento. Novos motoristas entram com este status.</p></div>
+            <div class="flex gap-3 items-start"><span class="rounded-full px-2.5 py-1 border bg-blue-500/15 text-blue-300 border-blue-500/30 shrink-0">Em rota</span><p class="text-slate-400 pt-1">Definido automaticamente quando a viagem entra em andamento. Não pode ser escolhido manualmente.</p></div>
+            <div class="flex gap-3 items-start"><span class="rounded-full px-2.5 py-1 border bg-slate-500/15 text-slate-400 border-slate-500/30 shrink-0">Inativo</span><p class="text-slate-400 pt-1">Não aparece como opção para novos agendamentos. Pode ser definido manualmente quando o motorista não está em rota.</p></div>
+          </div>
+          <p class="text-xs text-slate-500 mt-4">Ao concluir ou cancelar uma viagem, o motorista que estava em rota volta automaticamente para Disponível.</p>
         </div>
 
         <div class="bg-base-850 border border-base-700/60 rounded-xl shadow-card p-6">
@@ -858,6 +910,10 @@
             <div>
               <p class="text-white font-medium">Motorista não encontrado</p>
               <p class="text-slate-400 mt-1">Digite o nome e selecione um motorista válido na lista de sugestões.</p>
+            </div>
+            <div>
+              <p class="text-white font-medium">Motorista não aparece no agendamento</p>
+              <p class="text-slate-400 mt-1">Confira o status. Apenas motoristas Disponíveis aparecem para seleção; Em rota e Inativos ficam indisponíveis.</p>
             </div>
             <div>
               <p class="text-white font-medium">Veículo não encontrado</p>
@@ -993,8 +1049,9 @@ const STATUS_MAP = {
 const STATUS_ORDER = Object.keys(STATUS_MAP);
 
 const DRIVER_STATUS_MAP = {
-  ativo:   { label: "Ativo",   cls: "bg-emerald-500/15 text-emerald-300 border-emerald-500/30" },
-  inativo: { label: "Inativo", cls: "bg-slate-500/15 text-slate-400 border-slate-500/30" },
+  disponivel: { label: "Disponível", cls: "bg-emerald-500/15 text-emerald-300 border-emerald-500/30" },
+  em_rota:    { label: "Em rota",    cls: "bg-blue-500/15 text-blue-300 border-blue-500/30" },
+  inativo:    { label: "Inativo",    cls: "bg-slate-500/15 text-slate-400 border-slate-500/30" },
 };
 const VEHICLE_STATUS_MAP = {
   disponivel:    { label: "Disponível",    cls: "bg-emerald-500/15 text-emerald-300 border-emerald-500/30" },
@@ -1218,16 +1275,16 @@ function renderHomeStats() {
   const elVehicles = $("#homeVehicles"), elDrivers = $("#homeDrivers"), elProgress = $("#homeInProgress"), elCompleted = $("#homeCompleted");
   if (!elVehicles) return;
   elVehicles.textContent = vehicles.length || 0;
-  elDrivers.textContent = drivers.filter(d => (d.status_m || "ativo") === "ativo").length;
+  elDrivers.textContent = drivers.filter(d => (d.status_m || "disponivel") === "disponivel").length;
   elProgress.textContent = trips.filter(t => t.status_vi === "em_andamento").length;
   elCompleted.textContent = trips.filter(t => t.status_vi === "concluida").length;
 }
 
 function renderStats() {
-  const motoristasAtivos = new Set(trips.filter(t => t.status_vi === "em_andamento" || t.status_vi === "agendada").map(t => t.id_motorista)).size;
+  const motoristasDisponiveis = drivers.filter(d => (d.status_m || "disponivel") === "disponivel").length;
   const veiculosEmViagem = new Set(trips.filter(t => t.status_vi === "em_andamento").map(t => t.id_veiculo)).size;
   $(`[data-stat="total"]`).textContent = trips.length;
-  $(`[data-stat="motoristas"]`).textContent = motoristasAtivos;
+  $(`[data-stat="motoristas"]`).textContent = motoristasDisponiveis;
   $(`[data-stat="veiculos"]`).textContent = veiculosEmViagem;
   renderHomeStats();
 }
@@ -1647,7 +1704,7 @@ function mostrarInfoMotorista(item) {
       <span>CNH: <strong class="text-slate-200">${esc(d.cnh || "—")}</strong></span>
       <span>Categoria: <strong class="text-slate-200">${esc(d.categoria_cnh || "—")}</strong></span>
       <span>Pontos: <strong class="text-slate-200">${esc(d.pontos_cnh ?? 0)}</strong></span>
-      <span>Status: <strong class="text-emerald-300">${esc((DRIVER_STATUS_MAP[d.status_m] || DRIVER_STATUS_MAP.ativo).label)}</strong></span>
+      <span>Status: <strong class="text-emerald-300">${esc((DRIVER_STATUS_MAP[d.status_m] || DRIVER_STATUS_MAP.disponivel).label)}</strong></span>
     </div>`;
   box.classList.remove("hidden");
 }
@@ -1689,7 +1746,7 @@ function veiculoCompativelComFiltro(v) {
 
 function renderTripDriverOptions() {
   configurarAutocompleteRecurso("#motoristaBusca", "#id_motorista", "#motoristaOptions",
-    () => drivers.filter(d => (d.status_m || "ativo") === "ativo" && motoristaCompativelComFiltro(d)).map(d => ({ id: d.id_motorista, label: `(ID: ${d.id_motorista}) ${d.nome || "Sem nome"}` })),
+    () => drivers.filter(d => (d.status_m || "disponivel") === "disponivel" && motoristaCompativelComFiltro(d)).map(d => ({ id: d.id_motorista, label: `(ID: ${d.id_motorista}) ${d.nome || "Sem nome"}` })),
     item => item.label,
     mostrarInfoMotorista,
     () => limparInfoAgendamento("#motoristaInfo")
@@ -1717,7 +1774,7 @@ $("#categoriaAgendamento").addEventListener("change", () => {
 function renderDrivers() {
   const q = driverFilter.q;
   const vis = drivers.filter(d => {
-    if (driverFilter.status !== "todos" && (d.status_m || "ativo") !== driverFilter.status) return false;
+    if (driverFilter.status !== "todos" && (d.status_m || "disponivel") !== driverFilter.status) return false;
     if (!q) return true;
     return (d.nome || "").toLowerCase().includes(q) || (d.cnh || "").toLowerCase().includes(q);
   });
@@ -1725,7 +1782,7 @@ function renderDrivers() {
   if (!vis.length) { $("#driversBody").innerHTML = ""; $("#driversEmpty").classList.remove("hidden"); return; }
   $("#driversEmpty").classList.add("hidden");
   $("#driversBody").innerHTML = vis.map(d => {
-    const st = DRIVER_STATUS_MAP[d.status_m] || DRIVER_STATUS_MAP.ativo;
+    const st = DRIVER_STATUS_MAP[d.status_m] || DRIVER_STATUS_MAP.disponivel;
     return `
     <tr class="border-b border-base-700/40 last:border-0 hover:bg-base-800/60 transition-colors">
       <td class="px-5 py-2.5 font-medium text-white">#${d.id_motorista}</td>
@@ -1734,9 +1791,14 @@ function renderDrivers() {
       <td class="px-5 py-2.5 text-slate-300">${esc(d.categoria_cnh)}</td>
       <td class="px-5 py-2.5 text-slate-400 tabular-nums">${d.pontos_cnh ?? 0}${Number(d.pontos_cnh) >= 20 ? ' <span class="text-red-400">⚠</span>' : ""}</td>
       <td class="px-5 py-2.5">
-        <select data-driver-status="${d.id_motorista}" class="text-xs rounded-full px-2 py-1 border bg-transparent cursor-pointer ${st.cls} focus:outline-none">
-          ${Object.entries(DRIVER_STATUS_MAP).map(([v, m]) => `<option value="${v}" class="bg-base-850 text-slate-200" ${v === (d.status_m || "ativo") ? "selected" : ""}>${m.label}</option>`).join("")}
-        </select>
+        ${(d.status_m || "disponivel") === "em_rota"
+          ? `<span class="text-xs rounded-full px-2.5 py-1 border inline-block ${st.cls}" title="Status controlado automaticamente pela viagem">${st.label}</span>`
+          : `<select data-driver-status="${d.id_motorista}" class="text-xs rounded-full px-2 py-1 border bg-transparent cursor-pointer ${st.cls} focus:outline-none">
+              ${["disponivel", "inativo"].map(val => {
+                const m = DRIVER_STATUS_MAP[val];
+                return `<option value="${val}" class="bg-base-850 text-slate-200" ${val === (d.status_m || "disponivel") ? "selected" : ""}>${m.label}</option>`;
+              }).join("")}
+            </select>`}
       </td>
       <td class="px-5 py-2.5 text-right whitespace-nowrap">
         <button data-edit-driver="${d.id_motorista}" class="text-slate-500 hover:text-route-400 transition-colors p-1.5 rounded-md hover:bg-route-500/10" aria-label="Editar motorista ${d.id_motorista}">
@@ -1805,7 +1867,7 @@ $("#driversBody").addEventListener("change", async e => {
   const sel = e.target.closest("[data-driver-status]");
   if (!sel) return;
   const id = sel.dataset.driverStatus, novo = sel.value;
-  const anterior = drivers.find(d => d.id_motorista == id)?.status_m || "ativo";
+  const anterior = drivers.find(d => d.id_motorista == id)?.status_m || "disponivel";
   sel.disabled = true;
   try {
     await api(`/drivers/${id}/status`, { method: "PATCH", body: JSON.stringify({ novo_status_m: novo }) });
