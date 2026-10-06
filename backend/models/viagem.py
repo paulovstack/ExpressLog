@@ -111,7 +111,7 @@ def atualizar_viagem_concluida(id_viagem, novo_status, nova_data_chegada):
         
         if novo_status_m is not None:
             sucesso = atualizar_status_motorista_banco(id_motorista, novo_status_m, conexao)
-             if not sucesso:
+            if not sucesso:
                 conexao.rollback()
                 return False
     
