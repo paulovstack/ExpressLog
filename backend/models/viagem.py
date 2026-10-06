@@ -37,7 +37,7 @@ def inserir_viagem(id_motorista, id_veiculo,peso_carga_kg, origem, destino, data
 def buscar_viagem_por_id(id_viagem, conexao=None):
     conexao_propria = False
     if conexao is None:
-        conexao = obter.conexao()
+        conexao = obter_conexao()
         conexao_propria = True
     
     try:
