@@ -1,4 +1,5 @@
 from database import obter_conexao
+from models.motorista import atualizar_status_motorista_banco
 
 
 def inserir_viagem(id_motorista, id_veiculo,peso_carga_kg, origem, destino, data_hora_saida=None, data_hora_chegada=None):
@@ -33,8 +34,12 @@ def inserir_viagem(id_motorista, id_veiculo,peso_carga_kg, origem, destino, data
     finally:
         conexao.close()
 
-def buscar_viagem_por_id(id_viagem):
-    conexao = obter_conexao()
+def buscar_viagem_por_id(id_viagem, conexao=None):
+    conexao_propria = False
+    if conexao is None:
+        conexao = obter.conexao()
+        conexao_propria = True
+    
     try:
         sql = """ SELECT * FROM Viagem WHERE id_viagem = %s 
         """
@@ -48,6 +53,7 @@ def buscar_viagem_por_id(id_viagem):
         return None
     
     finally:
+        if conexao_propria == True:
         conexao.close()
 
 def verificar_viagem_existente(id_veiculo, id_motorista, data_hora_saida):
@@ -91,7 +97,7 @@ def listar_todas_viagens():
 def atualizar_viagem_concluida(id_viagem, novo_status, nova_data_chegada):
     conexao = obter_conexao()
     try:
-        viagem = buscar_viagem_por_id(id_viagem)
+        viagem = buscar_viagem_por_id(id_viagem, conexao)
         if not viagem:
             return False
         id_motorista = viagem["id_motorista"]
@@ -104,16 +110,22 @@ def atualizar_viagem_concluida(id_viagem, novo_status, nova_data_chegada):
             novo_status_m = "disponivel"
         
         if novo_status_m is not None:
-            sucesso = atualizar_status_motorista_banco(id_motorista, novo_status_m)
-        # A query agora atualiza as duas colunas ao mesmo tempo
+            sucesso = atualizar_status_motorista_banco(id_motorista, novo_status_m, conexao)
+             if not sucesso:
+                conexao.rollback()
+                return False
+    
         sql = "UPDATE Viagem SET status_vi = %s, data_hora_chegada = %s WHERE id_viagem = %s"
         with conexao.cursor() as cursor:
             cursor.execute(sql, (novo_status, nova_data_chegada, id_viagem))
+        
         conexao.commit()
         return True
     except Exception as e:
+        conexao.rollback()
         print(f"Erro ao atualizar viagem: {e}")
         return False
+    
     finally:
         conexao.close()
 
